@@ -49,8 +49,9 @@ export default {
   layout: 'sidemenu',
   contentWidth: 'Fluid',
   fixedHeader: false,
-  autoHideHeader: false,
-  fixSiderbar: false,
+  autoHideHeader: true,
+  fixSiderbar: true,
+  // 色弱模式
   colorWeak: false,
   menu: {
     locale: true,
@@ -58,4 +59,4 @@ export default {
   title: '后台管理 Pro4',
   pwa: false,
   iconfontUrl: '',
-} as DefaultSettings;
+} as DefaultSettings

@@ -13,8 +13,6 @@ import { queryRule, updateRule, addRule, removeRule } from './service';
  * @param fields
  */
 
-import ModalBasic from './ModalBasic';
-
 const handleAdd = async (fields: TableListItem) => {
   const hide = message.loading('正在添加');
 
@@ -169,7 +167,6 @@ const TableList: React.FC<{}> = () => {
   ];
   return (
     <PageHeaderWrapper>
-      <ModalBasic />
       <ProTable<TableListItem>
         headerTitle="查询表格"
         actionRef={actionRef}

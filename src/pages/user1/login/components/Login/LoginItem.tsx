@@ -9,7 +9,9 @@ import LoginContext, { LoginContextProps } from './LoginContext';
 import styles from './index.less';
 
 export type WrappedLoginItemProps = LoginItemProps;
+
 export type LoginItemKeyType = keyof typeof ItemMap;
+
 export interface LoginItemType {
   UserName: React.FC<WrappedLoginItemProps>;
   Password: React.FC<WrappedLoginItemProps>;

@@ -2,9 +2,7 @@
 import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
-
 const { REACT_APP_ENV } = process.env;
-
 export default defineConfig({
   hash: true,
   antd: {},
@@ -22,7 +20,8 @@ export default defineConfig({
     loading: '@/components/PageLoading/index',
   },
   targets: {
-    ie: 11,
+    // 目标代码兼容 ie11
+    // ie: 11,
   },
   // umi routes: https://umijs.org/docs/routing
   routes: [
@@ -32,9 +31,10 @@ export default defineConfig({
       routes: [
         {
           name: 'login',
-          path: '/user/login',
-          component: './user/login',
+          path: '/user/login1',
+          component: './user1/login',
         },
+        { component: './Exception/404-ToLogin' }
       ],
     },
     {
@@ -57,40 +57,43 @@ export default defineConfig({
               component: './Welcome',
             },
             {
-              path: '/admin',
-              name: 'admin',
-              icon: 'crown',
-              component: './Admin',
-              authority: ['admin'],
-              routes: [
-                {
-                  path: '/admin/sub-page',
-                  name: 'sub-page',
-                  icon: 'smile',
-                  component: './Welcome',
-                  authority: ['admin'],
-                },
-              ],
-            },
-            {
               name: 'list.table-list',
               icon: 'table',
               path: '/list',
               component: './ListTableList',
             },
             {
-              component: './404',
+              name: 'exception',
+              icon: 'WarningOutlined',
+              routes: [
+                {
+                  path: '/exception/403',
+                  name: 'not-permission',
+                  icon: 'WarningOutlined',
+                  component: './Exception/403',
+                },
+                {
+                  path: '/exception/404',
+                  name: 'not-found',
+                  icon: 'WarningOutlined',
+                  component: './Exception/404',
+                },
+                {
+                  path: '/exception/500',
+                  name: 'server-error',
+                  icon: 'WarningOutlined',
+                  component: './Exception/500',
+                },
+                { component: './Exception/404' },
+              ]
             },
+            { component: './Exception/404' },
           ],
         },
-        {
-          component: './404',
-        },
+        { component: './Exception/404' },
       ],
     },
-    {
-      component: './404',
-    },
+    { component: './Exception/404' },
   ],
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {

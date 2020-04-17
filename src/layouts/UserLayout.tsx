@@ -2,7 +2,7 @@ import { MenuDataItem, getMenuData, getPageTitle } from '@ant-design/pro-layout'
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useIntl, ConnectProps, connect } from 'umi';
 import React from 'react';
-import SelectLang from '@/components/SelectLang';
+// import SelectLang from '@/components/SelectLang';
 import { ConnectState } from '@/models/connect';
 import logo from '../assets/logo.svg';
 import styles from './UserLayout.less';
@@ -43,7 +43,7 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
 
       <div className={styles.container}>
         <div className={styles.lang}>
-          <SelectLang />
+          {/* <SelectLang /> */}
         </div>
         <div className={styles.content}>
           <div className={styles.top}>
@@ -51,13 +51,13 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
               <img alt="logo" className={styles.logo} src={logo} />
               <span className={styles.title}>后台管理 Pro4</span>
             </div>
-            {/* <div className={styles.desc}>Ant Design 是西湖区最具影响力的 Web 设计规范</div> */}
+            <div className={styles.desc}>[ Powered by Ant Design Pro v4 ]</div>
           </div>
           {children}
         </div>
       </div>
     </HelmetProvider>
-  );
-};
+  )
+}
 
-export default connect(({ settings }: ConnectState) => ({ ...settings }))(UserLayout);
+export default connect(({ settings }: ConnectState) => ({ ...settings }))(UserLayout)
