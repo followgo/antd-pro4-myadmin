@@ -78,8 +78,8 @@ export default {
     },
   ],
   'POST /api/login/account': (req: Request, res: Response) => {
-    const { password, userName, type } = req.body;
-    if (password === 'admin' && userName === 'admin') {
+    const { password, username, type } = req.body;
+    if (password === 'admin' && username === 'admin') {
       res.send({
         status: 'ok',
         type,
@@ -87,7 +87,7 @@ export default {
       });
       return;
     }
-    if (password === 'user' && userName === 'user') {
+    if (password === 'user' && username === 'user') {
       res.send({
         status: 'ok',
         type,

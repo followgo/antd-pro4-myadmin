@@ -39,8 +39,8 @@ const Login: React.FC<LoginProps> = (props) => {
                         <LoginFailedMsg content="账户或密码错误" />
                     )}
 
-                    <Username />
-                    <Password />
+                    <Username name="username" />
+                    <Password name="password" />
                 </Tab>
                 <Tab key="ldap" tab="LDAP 认证登陆" disabled />
                 <div>

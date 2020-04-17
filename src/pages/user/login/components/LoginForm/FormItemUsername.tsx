@@ -8,7 +8,6 @@ import styles from './index.less'
 const formItemOptions = {
     props: {
         size: 'large',
-        id: 'username',
         prefix: <UserOutlined style={{ color: '#1890ff' }} className={styles.prefixIcon} />,
         placeholder: '用户名',
     },
@@ -39,6 +38,7 @@ const FormItem: React.FC<IFormItemProps> = (props) => {
     // get getFieldDecorator props
     const options = getFormItemOptions(props)
     const otherProps = restProps || {}
+    otherProps.id = otherProps.id || name
 
     return (
         <Form.Item name={name} {...options}>

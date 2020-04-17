@@ -9,9 +9,7 @@ const formItemOptions = {
     props: {
         size: 'large',
         prefix: <LockTwoTone className={styles.prefixIcon} />,
-        type: 'password',
-        id: 'password',
-        placeholder: 'Password',
+        placeholder: '密码',
     },
     rules: [
         {
@@ -40,6 +38,7 @@ const FormItem: React.FC<IFormItemProps> = (props) => {
     // get getFieldDecorator props
     const options = getFormItemOptions(props)
     const otherProps = restProps || {}
+    otherProps.id = otherProps.id || name
 
     return (
         <Form.Item name={name} {...options}>

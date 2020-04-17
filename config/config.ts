@@ -31,13 +31,8 @@ export default defineConfig({
       routes: [
         {
           name: 'login',
-          path: '/user/login1',
-          component: './user1/login',
-        },
-        {
-          name: 'login',
           path: '/user/login',
-          component: './user1/login',
+          component: './user/login',
         },
         { component: './Exception/404-ToLogin' }
       ],
