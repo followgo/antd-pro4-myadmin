@@ -6,7 +6,7 @@ import { ButtonProps } from 'antd/es/button'
 import styles from './index.less'
 
 interface IProps extends ButtonProps {
-    className?: string;
+    className?: string
 }
 
 const LoginSubmitButton: React.FC<IProps> = ({ className, ...rest }) => {
@@ -21,7 +21,7 @@ const LoginSubmitButton: React.FC<IProps> = ({ className, ...rest }) => {
                 {...rest}
             />
         </Form.Item>
-    );
-};
+    )
+}
 
 export default LoginSubmitButton
