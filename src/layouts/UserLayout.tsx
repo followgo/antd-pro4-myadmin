@@ -2,8 +2,7 @@ import { MenuDataItem, getMenuData, getPageTitle } from '@ant-design/pro-layout'
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useIntl, ConnectProps, connect } from 'umi';
 import React from 'react';
-// import SelectLang from '@/components/SelectLang';
-import { ConnectState } from '@/models/connect';
+import { ConnectState } from '@/models/connect'
 import logo from '../assets/logo.svg';
 import styles from './UserLayout.less';
 
@@ -51,10 +50,10 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
               <img alt="logo" className={styles.logo} src={logo} />
               <span className={styles.title}>后台管理 Pro4</span>
             </div>
-            <div className={styles.desc}>[ Powered by Ant Design Pro v4 ]</div>
+            <div className={styles.desc}>[ Designed by Bing in 2020 ]</div>
           </div>
           {children}
-        </div>
+        </div>      
       </div>
     </HelmetProvider>
   )

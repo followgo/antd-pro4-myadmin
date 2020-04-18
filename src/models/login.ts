@@ -84,4 +84,4 @@ const Model: LoginModelType = {
   },
 };
 
-export default Model;
+export default Model

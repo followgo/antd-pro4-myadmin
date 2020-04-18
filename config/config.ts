@@ -34,7 +34,9 @@ export default defineConfig({
           path: '/user/login',
           component: './user/login',
         },
-        { component: './Exception/404-ToLogin' }
+        {
+          component: './Exception/404-ToLogin',
+        },
       ],
     },
     {
@@ -57,14 +59,26 @@ export default defineConfig({
               component: './Welcome',
             },
             {
-              name: 'list.table-list',
-              icon: 'table',
-              path: '/list',
-              component: './ListTableList',
+              name: 'account',
+              icon: 'UserOutlined',
+              path: '/account',
+              routes:[
+                {
+                  name: 'settings',
+                  icon: 'ProfileOutlined',
+                  path: '/account/settings',
+                  component: './Account/Settings',
+                },
+                {
+                  component: './Exception/404',
+                },
+              ]
             },
             {
+              hideInMenu: true, // 路由不显示在菜单中
               name: 'exception',
               icon: 'WarningOutlined',
+              path: '/exception',
               routes: [
                 {
                   path: '/exception/403',
@@ -84,16 +98,24 @@ export default defineConfig({
                   icon: 'WarningOutlined',
                   component: './Exception/500',
                 },
-                { component: './Exception/404' },
-              ]
+                {
+                  component: './Exception/404',
+                },
+              ],
             },
-            { component: './Exception/404' },
+            {
+              component: './Exception/404',
+            },
           ],
         },
-        { component: './Exception/404' },
+        {
+          component: './Exception/404',
+        },
       ],
     },
-    { component: './Exception/404' },
+    {
+      component: './Exception/404',
+    },
   ],
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {

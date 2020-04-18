@@ -9,7 +9,7 @@ const formItemOptions = {
     props: {
         size: 'large',
         prefix: <UserOutlined style={{ color: '#1890ff' }} className={styles.prefixIcon} />,
-        placeholder: '用户名',
+        placeholder: '用户名 或 邮箱',
     },
     rules: [
         {
