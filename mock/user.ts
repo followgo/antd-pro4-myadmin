@@ -1,157 +1,179 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express'
+import { mock, Random } from 'mockjs'
+import { IUserAccount } from '@/services/user'
 
-function getFakeCaptcha(req: Request, res: Response) {
-  return res.json('captcha-xxx');
-}
-// 代码中会兼容本地 service mock 以及部署站点的静态数据
+let mockAccounts: IUserAccount[] = [
+    {
+        uuid: '8612691e-878f-4db5-befd-476d5e313d01',
+        username: 'admin',
+        password: 'admin',
+        nickname: Random.name(),
+        email: 'admin@localhost',
+        authority: 'admin',
+        enabled: true
+    },
+    {
+        uuid: '8612691e-878f-4db5-befd-476d5e313d02',
+        username: 'user',
+        password: 'user',
+        nickname: Random.name(),
+        email: 'user@localhost',
+        authority: 'user',
+        enabled: true
+    },
+    {
+        uuid: '8612691e-878f-4db5-befd-476d5e313d93',
+        username: 'guest',
+        password: 'guest',
+        nickname: Random.name(),
+        email: 'guest@localhost',
+        authority: 'guest',
+        enabled: true
+    },
+    ...mock({
+        "array|2-10": [{
+            uuid: Random.guid(),
+            username: Random.word(4, 10),
+            password: '',
+            nickname: Random.name(),
+            email: Random.email(),
+            'authority|1': ['admin', 'user', 'guest'],
+            enabled: Random.boolean(),
+        }]
+    }).array
+]
+
+let currentUserUUID: string = ''
+
 export default {
-  // 支持值为 Object 和 Array
-  'GET /api/currentUser': {
-    uuid: '8612691e-878f-4db5-befd-476d5e313d97',
-    name: 'Serati Ma',
-    nickname: 'Serati Ma',
-    avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
-    userid: '00000001',
-    email: 'antdesign@alipay.com',
-    signature: '海纳百川，有容乃大',
-    title: '交互专家',
-    group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
-    tags: [
-      {
-        key: '0',
-        label: '很有想法的',
-      },
-      {
-        key: '1',
-        label: '专注设计',
-      },
-      {
-        key: '2',
-        label: '辣~',
-      },
-      {
-        key: '3',
-        label: '大长腿',
-      },
-      {
-        key: '4',
-        label: '川妹子',
-      },
-      {
-        key: '5',
-        label: '海纳百川',
-      },
-    ],
-    notifyCount: 12,
-    unreadCount: 11,
-    country: 'China',
-    geographic: {
-      province: {
-        label: '浙江省',
-        key: '330000',
-      },
-      city: {
-        label: '杭州市',
-        key: '330100',
-      },
-    },
-    address: '西湖区工专路 77 号',
-    phone: '0752-268888888',
-  },
-  // GET POST 可省略
-  'GET /api/users': [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-    },
-  ],
-  
-  'POST /api/login/account': (req: Request, res: Response) => {
-    const { password, username, type } = req.body;
-    if (password === 'admin' && username === 'admin') {
-      res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'admin',
-      });
-      return;
-    }
-    if (password === 'user' && username === 'user') {
-      res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'user',
-      });
-      return;
-    }
-    if (type === 'mobile') {
-      res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'admin',
-      });
-      return;
-    }
+    // 用户登入
+    'POST /user/login/account': (req: Request, res: Response) => {
+        const { password, username } = req.body
 
-    res.send({
-      status: 'error',
-      type,
-      currentAuthority: 'guest',
-    });
-  },
-  'POST /api/register': (req: Request, res: Response) => {
-    res.send({ status: 'ok', currentAuthority: 'user' });
-  },
-  'GET /api/500': (req: Request, res: Response) => {
-    res.status(500).send({
-      timestamp: 1513932555104,
-      status: 500,
-      error: 'error',
-      message: 'error',
-      path: '/base/category/list',
-    });
-  },
-  'GET /api/404': (req: Request, res: Response) => {
-    res.status(404).send({
-      timestamp: 1513932643431,
-      status: 404,
-      error: 'Not Found',
-      message: 'No message available',
-      path: '/base/category/list/2121212',
-    });
-  },
-  'GET /api/403': (req: Request, res: Response) => {
-    res.status(403).send({
-      timestamp: 1513932555104,
-      status: 403,
-      error: 'Unauthorized',
-      message: 'Unauthorized',
-      path: '/base/category/list',
-    });
-  },
-  'GET /api/401': (req: Request, res: Response) => {
-    res.status(401).send({
-      timestamp: 1513932555104,
-      status: 401,
-      error: 'Unauthorized',
-      message: 'Unauthorized',
-      path: '/base/category/list',
-    });
-  },
+        const existing = mockAccounts.some(value => {
+            if ((value.username === username || value.email === username) &&
+                value.password === password && value.enabled) {
+                currentUserUUID = value.uuid
 
-  'GET  /api/login/captcha': getFakeCaptcha,
-};
+                // 当返回访问令牌时，HTTP服务器必须在HTTP头信息中增加两个属性，确保客户端不缓存返回结果。
+                res.setHeader('Cache-Control', 'no-store')
+                res.setHeader('Pragma', 'no-store')
+
+                setTimeout(() => res.status(201).send({
+                    status: 201,
+                    message: '成功',
+                    date: {
+                        access_token: 'mock-access_token--9DAAJGfNWkHE81mpnR3gXzfrBAB3WUAg',
+                        token_type: 'Bearer',
+                        expires_in: 3600,
+                        refresh_token: 'mock-refresh_token-eyJhbGciOiJIUzUxMiJ9',
+                    }
+                }), 1000)
+                return true
+            }
+            return false
+        })
+
+        if (!existing) {
+            res.status(401).send({ status: 401, message: '用户名或密码错误' })
+        }
+    },
+
+    // 用户登出
+    'POST /user/logout': (req: Request, res: Response) => {
+        res.status(201).send({ status: 201, message: '成功' })
+    },
+
+    // 返回用户账户信息
+    'GET /user/accounts/mysettings': (req: Request, res: Response) => {
+        const existing = mockAccounts.some(value => {
+            if (value.uuid === currentUserUUID) {
+                setTimeout(() => res.status(200).send({
+                    status: 200,
+                    message: '成功',
+                    date: value,
+                }), 1000)
+                return true
+            }
+            return false
+        })
+
+        if (!existing) {
+            res.status(404).send({ status: 404, message: '该用户不存在' })
+        }
+    },
+
+    // 返回所有用户账户信息
+    'GET /user/accounts': (req: Request, res: Response) => {
+        setTimeout(() => res.status(200).send({
+            status: 200,
+            message: '成功',
+            date: mockAccounts,
+        }), 1000)
+    },
+
+    // 添加
+    'POST /user/accounts': (req: Request, res: Response) => {
+        const data: IAccount = req.body
+        data.uuid = Random.guid()
+        res.status(201).send({ status: 201, message: '成功', data: data })
+    },
+
+    // 替换
+    'PUT /user/accounts/:uuid': (req: Request, res: Response) => {
+        const uuid: string = req.param('uuid')
+        const data: IAccount = req.body
+        data.uuid = uuid
+
+        const existing = mockAccounts.some((value, index) => {
+            if (value.uuid === uuid) {
+                mockAccounts[index] = data
+                setTimeout(() => res.status(201).send({
+                    status: 201,
+                    message: '成功',
+                    date: mockAccounts[index],
+                }), 1000)
+                return true
+            }
+            return false
+        })
+
+        if (!existing) {
+            res.status(404).send({ status: 404, message: '该用户不存在' })
+        }
+    },
+
+    // 修补
+    'PATCH /user/accounts/:uuid': (req: Request, res: Response) => {
+        const uuid: string = req.param('uuid')
+        const { data, patch_fields } = req.body
+
+        const existing = mockAccounts.some((value, index) => {
+            if (value.uuid === uuid) {
+                (patch_fields as string[]).forEach(field => {
+                    mockAccounts[index][field] = (data as IAccount)[field]
+                })
+
+                setTimeout(() => res.status(201).send({
+                    status: 201,
+                    message: '成功',
+                    date: mockAccounts[index],
+                }), 1000)
+                return true
+            }
+            return false
+        })
+
+        if (!existing) {
+            res.status(404).send({ status: 404, message: '该用户不存在' })
+        }
+    },
+
+    // 删除
+    'DELETE /user/accounts/:uuid': (req: Request, res: Response) => {
+        const uuid: string = req.param('uuid')
+
+        mockAccounts = mockAccounts.filter(value => value.uuid !== uuid)
+        res.status(204).send({ status: 204, message: '成功' })
+    },
+}

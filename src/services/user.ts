@@ -1,13 +1,43 @@
-import request from '@/utils/request';
+import request from '@/utils/request'
 
-export async function query(): Promise<any> {
-  return request('/api/users');
+interface IApi {
+  status: number
+  message: string
 }
 
-export async function queryCurrent(): Promise<any> {
-  return request('/api/currentUser');
+export interface ILoginByAccountParamsType {
+  username: string
+  password: string
 }
 
-export async function queryNotices(): Promise<any> {
-  return request('/api/notices');
+export interface IToken {
+
+}
+
+export interface IUserAccount {
+  uuid: string,
+  username: string,
+  password: string,
+  email?: string,
+  nickname?: string,
+  avatar?: string,
+  authority: 'admin' | 'user' | 'guest'
+  enabled: boolean
+}
+
+// 使用用户名和密码登入系统
+export async function loginByAccount(params: ILoginByAccountParamsType) {
+  return request('/user/login/account', {
+    method: 'POST',
+    data: params,
+  })
+}
+
+// 登出系统
+export async function logout() {
+  return request('/user/logout', { method: 'POST' })
+}
+
+export async function queryMySettings() {
+  return request('/user/accounts/mysettings')
 }
