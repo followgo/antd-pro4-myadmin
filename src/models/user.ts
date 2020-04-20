@@ -1,85 +1,41 @@
-import { Effect, Reducer } from 'umi';
+import { Effect, Reducer } from 'umi'
+import { setAuthority } from '@/utils/authority'
+import { IUserAccount, queryMySettings } from '@/services/user'
 
-import { queryCurrent, query as queryUsers } from '@/services/user';
+export interface IUserModelState extends IUserAccount { }
 
-export interface CurrentUser {
-  avatar?: string;
-  name?: string;
-  title?: string;
-  group?: string;
-  signature?: string;
-  tags?: {
-    key: string;
-    label: string;
-  }[];
-  userid?: string;
-  unreadCount?: number;
-}
-
-export interface UserModelState {
-  currentUser?: CurrentUser;
-}
-
-export interface UserModelType {
-  namespace: 'user';
-  state: UserModelState;
+export interface IUserModel {
+  namespace: 'user'
+  state: IUserModelState | {}
   effects: {
-    fetch: Effect;
-    fetchCurrent: Effect;
-  };
+    fetchMySettings: Effect
+  }
   reducers: {
-    saveCurrentUser: Reducer<UserModelState>;
-    changeNotifyCount: Reducer<UserModelState>;
-  };
+    saveMySettings: Reducer<IUserModelState>
+  }
 }
 
-const UserModel: UserModelType = {
+const Model: IUserModel = {
   namespace: 'user',
 
-  state: {
-    currentUser: {},
-  },
+  state: {},
 
   effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-    },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response,
-      });
+    *fetchMySettings(_, { call, put }) {
+      const res = yield call(queryMySettings)
+      if (res.status === 200) {
+        // 设置用户权限
+        setAuthority(res.data.authority)
+        yield put({ type: 'saveMySettings', payload: res.data })
+      }
     },
   },
 
   reducers: {
-    saveCurrentUser(state, action) {
-      return {
-        ...state,
-        currentUser: action.payload || {},
-      };
-    },
-    changeNotifyCount(
-      state = {
-        currentUser: {},
-      },
-      action,
-    ) {
-      return {
-        ...state,
-        currentUser: {
-          ...state.currentUser,
-          notifyCount: action.payload.totalCount,
-          unreadCount: action.payload.unreadCount,
-        },
-      };
+    saveMySettings(_, { payload }) {
+      return payload
     },
   },
-};
+}
 
-export default UserModel;
+export default Model

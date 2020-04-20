@@ -1,32 +1,34 @@
 import { Reducer } from 'umi';
-import defaultSettings, { DefaultSettings } from '../../config/defaultSettings';
+import defaultSettings, { DefaultSettings } from '../../config/defaultSettings'
 
-export interface SettingModelType {
-  namespace: 'settings';
-  state: DefaultSettings;
+export interface ISettingModelState extends DefaultSettings { }
+
+export interface ISettingModel {
+  namespace: 'settings'
+  state: ISettingModelState
   reducers: {
-    changeSetting: Reducer<DefaultSettings>;
+    changeSetting: Reducer<ISettingModelState>
   };
 }
 
 const updateColorWeak: (colorWeak: boolean) => void = (colorWeak) => {
-  const root = document.getElementById('root');
+  const root = document.getElementById('root')
   if (root) {
-    root.className = colorWeak ? 'colorWeak' : '';
+    root.className = colorWeak ? 'colorWeak' : ''
   }
 };
 
-const SettingModel: SettingModelType = {
+const Model: ISettingModel = {
   namespace: 'settings',
   state: defaultSettings,
   reducers: {
     changeSetting(state = defaultSettings, { payload }) {
-      const { colorWeak, contentWidth } = payload;
+      const { colorWeak, contentWidth } = payload
 
       if (state.contentWidth !== contentWidth && window.dispatchEvent) {
-        window.dispatchEvent(new Event('resize'));
+        window.dispatchEvent(new Event('resize'))
       }
-      updateColorWeak(!!colorWeak);
+      updateColorWeak(!!colorWeak)
       return {
         ...state,
         ...payload,
@@ -34,4 +36,4 @@ const SettingModel: SettingModelType = {
     },
   },
 };
-export default SettingModel;
+export default Model

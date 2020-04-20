@@ -1,86 +1,101 @@
-import { stringify } from 'querystring';
-import { history, Reducer, Effect } from 'umi';
+import { stringify } from 'querystring'
+import { history, Reducer, Effect } from 'umi'
+import { loginByAccount, logout } from '@/services/user'
+import { getPageQuery } from '@/utils/utils'
 
-import { fakeAccountLogin } from '@/services/login';
-import { setAuthority } from '@/utils/authority';
-import { getPageQuery } from '@/utils/utils';
-
-export interface StateType {
-  status?: 'ok' | 'error';
-  type?: string;
-  currentAuthority?: 'user' | 'guest' | 'admin';
+export interface ILoginState {
+  login_type: string
+  login_status: string
+  access_token: string
+  token_type: string
+  refresh_token: string
 }
 
-export interface LoginModelType {
-  namespace: string;
-  state: StateType;
+export interface ILoginModel {
+  namespace: 'login'
+  state: ILoginState 
   effects: {
-    login: Effect;
-    logout: Effect;
-  };
+    loginByAccount: Effect
+    logout: Effect
+  }
   reducers: {
-    changeLoginStatus: Reducer<StateType>;
-  };
+    changeLoginType: Reducer
+    changeLoginStatus: Reducer
+    clearLoginStatus: Reducer
+  }
 }
 
-const Model: LoginModelType = {
+const Model: ILoginModel = {
   namespace: 'login',
 
-  state: {
-    status: undefined,
-  },
+  state: {},
 
   effects: {
-    *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
-      // Login successfully
-      if (response.status === 'ok') {
-        const urlParams = new URL(window.location.href);
-        const params = getPageQuery();
-        let { redirect } = params as { redirect: string };
+    *loginByAccount({ payload }, { call, put }) {
+      const res = yield call(loginByAccount, payload)
+      yield put({ type: 'changeLoginType', payload: { login_type: 'account', login_status: res.message } })
+
+      if (res.status === 201) {
+        yield put({ type: 'changeLoginStatus', payload: res.data })
+
+        const urlParams = new URL(window.location.href)
+        const params = getPageQuery()
+        let { redirect } = params as { redirect: string }
+
         if (redirect) {
-          const redirectUrlParams = new URL(redirect);
+          const redirectUrlParams = new URL(redirect)
           if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
+            redirect = redirect.substr(urlParams.origin.length)
             if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
+              redirect = redirect.substr(redirect.indexOf('#') + 1)
             }
           } else {
-            window.location.href = '/';
+            window.location.href = '/'
             return;
           }
         }
-        history.replace(redirect || '/');
+        history.replace(redirect || '/')
       }
     },
 
-    logout() {
+    *logout(_, { call, put }) {
+      yield call(logout)
+      put({ type: 'clearLoginStatus' })
+
       const { redirect } = getPageQuery();
-      // Note: There may be security issues, please note
       if (window.location.pathname !== '/user/login' && !redirect) {
         history.replace({
           pathname: '/user/login',
-          search: stringify({
-            redirect: window.location.href,
-          }),
+          search: stringify({ redirect: window.location.href }),
         });
       }
     },
   },
 
   reducers: {
-    changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+    changeLoginType(state, { payload }): ILoginState {
+      const { login_type, login_status } = payload
+      return { ...state, login_type, login_status }
+    },
+
+    changeLoginStatus(state, { payload }): ILoginState {
+      const { access_token, token_type, refresh_token } = payload
+      sessionStorage.setItem('access_token', access_token)
+      sessionStorage.setItem('token_type', token_type)
+      sessionStorage.setItem('refresh_token', refresh_token)
+
       return {
         ...state,
-        status: payload.status,
-        type: payload.type,
-      };
+        access_token, token_type, refresh_token
+      }
     },
+
+    clearLoginStatus(): {} {
+      sessionStorage.removeItem('access_token')
+      sessionStorage.removeItem('token_type')
+      sessionStorage.removeItem('refresh_token')
+      return {}
+    }
   },
 };
 

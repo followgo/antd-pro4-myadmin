@@ -62,7 +62,7 @@ export default {
                 setTimeout(() => res.status(201).send({
                     status: 201,
                     message: '成功',
-                    date: {
+                    data: {
                         access_token: 'mock-access_token--9DAAJGfNWkHE81mpnR3gXzfrBAB3WUAg',
                         token_type: 'Bearer',
                         expires_in: 3600,
@@ -91,7 +91,7 @@ export default {
                 setTimeout(() => res.status(200).send({
                     status: 200,
                     message: '成功',
-                    date: value,
+                    data: value,
                 }), 1000)
                 return true
             }
@@ -108,21 +108,21 @@ export default {
         setTimeout(() => res.status(200).send({
             status: 200,
             message: '成功',
-            date: mockAccounts,
+            data: mockAccounts,
         }), 1000)
     },
 
     // 添加
     'POST /user/accounts': (req: Request, res: Response) => {
-        const data: IAccount = req.body
+        const data: IUserAccount = req.body
         data.uuid = Random.guid()
-        res.status(201).send({ status: 201, message: '成功', data: data })
+        res.status(201).send({ status: 201, message: '成功', data })
     },
 
     // 替换
     'PUT /user/accounts/:uuid': (req: Request, res: Response) => {
         const uuid: string = req.param('uuid')
-        const data: IAccount = req.body
+        const data: IUserAccount = req.body
         data.uuid = uuid
 
         const existing = mockAccounts.some((value, index) => {
@@ -131,7 +131,7 @@ export default {
                 setTimeout(() => res.status(201).send({
                     status: 201,
                     message: '成功',
-                    date: mockAccounts[index],
+                    data: mockAccounts[index],
                 }), 1000)
                 return true
             }
@@ -151,13 +151,13 @@ export default {
         const existing = mockAccounts.some((value, index) => {
             if (value.uuid === uuid) {
                 (patch_fields as string[]).forEach(field => {
-                    mockAccounts[index][field] = (data as IAccount)[field]
+                    mockAccounts[index][field] = (data as IUserAccount)[field]
                 })
 
                 setTimeout(() => res.status(201).send({
                     status: 201,
                     message: '成功',
-                    date: mockAccounts[index],
+                    data: mockAccounts[index],
                 }), 1000)
                 return true
             }

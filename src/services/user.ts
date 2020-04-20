@@ -1,17 +1,8 @@
 import request from '@/utils/request'
 
-interface IApi {
-  status: number
-  message: string
-}
-
 export interface ILoginByAccountParamsType {
   username: string
   password: string
-}
-
-export interface IToken {
-
 }
 
 export interface IUserAccount {
@@ -27,10 +18,7 @@ export interface IUserAccount {
 
 // 使用用户名和密码登入系统
 export async function loginByAccount(params: ILoginByAccountParamsType) {
-  return request('/user/login/account', {
-    method: 'POST',
-    data: params,
-  })
+  return request('/user/login/account', { method: 'POST', data: params })
 }
 
 // 登出系统
@@ -40,4 +28,20 @@ export async function logout() {
 
 export async function queryMySettings() {
   return request('/user/accounts/mysettings')
+}
+
+export async function queryUserAccounts() {
+  return request('/user/accounts')
+}
+
+export async function updateUserAccount(uuid: string, params: IUserAccount) {
+  return request(`/user/accounts/${uuid}`, { method: 'PUT', data: params })
+}
+
+export async function patchUserAccount(uuid: string, params: IUserAccount, patch_fields: string[]) {
+  return request(`/user/accounts/${uuid}`, { method: 'PATCH', data: { data: params, patch_fields } })
+}
+
+export async function deleteUserAccount(uuid: string) {
+  return request(`/user/accounts/${uuid}`)
 }
