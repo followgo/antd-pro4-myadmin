@@ -4,6 +4,8 @@
  */
 import { extend } from 'umi-request'
 import { notification } from 'antd'
+import tokenStorage from './tokenStorage'
+import { useDispatch } from 'umi'
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -51,6 +53,34 @@ const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
   timeout: 1000 * 5,
+})
+
+// 请求添加 token
+request.interceptors.request.use(async (url, options) => {
+  const { access_token = '', refresh_token = '', token_obtain_at = '0', token_type = '', token_expires_in = '0' } = tokenStorage.get()
+
+  if (access_token) {
+
+    if (refresh_token && token_expires_in !== '0') {
+      const dispatch = useDispatch();
+
+      // 检查 token 的有效期
+      const duration = new Date().getTime() - new Date(token_obtain_at).getTime()  // 单位 ms
+      const lifeTime = parseInt(token_expires_in, 10) - duration / 1000
+      if (lifeTime < 5) { // 已经过期，或者 5 秒的时间内过期
+        await dispatch('logon/refreshAccessToken')
+
+      } else if (lifeTime < 300) { // 5 分钟要过期
+        dispatch('logon/refreshAccessToken')
+      }
+    }
+
+
+
+
+  }
+
+
 })
 
 export default request

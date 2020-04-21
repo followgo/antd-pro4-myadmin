@@ -79,6 +79,19 @@ export default {
         }
     },
 
+    // 刷新token
+    'POST /user/refresh_token': (req: Request, res: Response) => {
+        res.status(201).send({
+            status: 201,
+            message: '成功',
+            data: {
+                access_token: 'mock-access_token--9DAAJGfNWkHE81mpnR3gXzfrBAB3WUAg',
+                token_type: 'Bearer',
+                expires_in: 3600,
+            }
+        })
+    },
+
     // 用户登出
     'POST /user/logout': (req: Request, res: Response) => {
         res.status(201).send({ status: 201, message: '成功' })

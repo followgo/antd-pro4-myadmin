@@ -46,8 +46,8 @@ class BaseView extends Component<BaseViewProps> {
             initialValues={currentUser}
             hideRequiredMark
           >
-            <Form.Item name="uuid" label="唯一识别码">
-              <Input disabled />
+            <Form.Item name="uuid" label="唯一识别码（只读）">
+              <Input readOnly />
             </Form.Item>
 
             <Form.Item name="email" label="邮箱"

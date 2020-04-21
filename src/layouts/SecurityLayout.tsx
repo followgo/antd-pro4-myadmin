@@ -21,7 +21,8 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
   }
 
   componentDidMount() {
-    const loginOk = this.state.loginStatus?.login_status === 'ok'
+    const { loginStatus } = this.state;
+    const loginOk = loginStatus?.login_status === 'ok'
     if (loginOk) {
       const { dispatch } = this.props
       if (dispatch) {
@@ -45,12 +46,12 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       return <Redirect to={`/user/login?${queryString}`} />;
     }
     if ((!loginOk && loading) || !isReady) {
-      return <PageLoading />;
+      return <PageLoading />
     }
-    return children;
+    return children
   }
 }
 
 export default connect(({ loading }: ConnectState) => ({
   loading: loading.models.user,
-}))(SecurityLayout);
+}))(SecurityLayout)

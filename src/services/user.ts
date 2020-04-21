@@ -21,6 +21,11 @@ export async function loginByAccount(params: ILoginByAccountParamsType) {
   return request('/user/login/account', { method: 'POST', data: params })
 }
 
+// 刷新token
+export async function refreshToken(){
+  return request.post('/user/refresh_token')
+}
+
 // 登出系统
 export async function logout() {
   return request('/user/logout', { method: 'POST' })
