@@ -2,7 +2,8 @@ import { Checkbox } from 'antd'
 import React, { useState } from 'react'
 import { connect, Dispatch } from 'umi'
 import { ILoginByAccountParamsType } from '@/services/user'
-import { ConnectState, ILoginState } from '@/models/connect'
+import { ConnectState } from '@/models/connect'
+import tokenStorage from '@/utils/tokenStorage'
 import LoginForm from './components/LoginForm'
 import LoginFailedMsg from './components/LoginFailedMsg'
 
@@ -12,13 +13,13 @@ const { Tab, Username, Password, Submit } = LoginForm
 
 interface LoginProps {
     dispatch: Dispatch
-    loginState: ILoginState
+    login_type: string
     submitting?: boolean
 }
 
 const Login: React.FC<LoginProps> = (props) => {
-    const { loginState, submitting } = props
-    const { login_status, login_type } = loginState
+    const { login_type, submitting } = props
+    const { login_status } = tokenStorage.get()
 
     const [autoLogin, setAutoLogin] = useState(true)
     const [type, setType] = useState<string>('account')
@@ -50,6 +51,6 @@ const Login: React.FC<LoginProps> = (props) => {
 }
 
 export default connect(({ login, loading }: ConnectState) => ({
-    loginState: login,
+    login_type: login.login_type,
     submitting: loading.effects['login/loginByAccount'],
 }))(Login)

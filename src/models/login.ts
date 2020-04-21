@@ -2,13 +2,10 @@ import { stringify } from 'querystring'
 import { history, Reducer, Effect } from 'umi'
 import { loginByAccount, logout } from '@/services/user'
 import { getPageQuery } from '@/utils/utils'
+import tokenStorage from '@/utils/tokenStorage'
 
 export interface ILoginState {
   login_type: string
-  login_status: 'ok' | 'aborted' | 'void'
-  access_token?: string
-  token_type?: string
-  refresh_token?: string
 }
 
 export interface ILoginModel {
@@ -27,7 +24,7 @@ export interface ILoginModel {
 const Model: ILoginModel = {
   namespace: 'login',
 
-  state: { login_type: 'account', login_status: 'void' },
+  state: { login_type: 'account' },
 
   effects: {
     *loginByAccount({ payload }, { call, put }) {
@@ -80,23 +77,16 @@ const Model: ILoginModel = {
   },
 
   reducers: {
-    changeLoginStatus(state, { payload }): ILoginState {
-      const { access_token, token_type, refresh_token, login_type, login_status } = payload
-      sessionStorage.setItem('access_token', access_token)
-      sessionStorage.setItem('token_type', token_type)
-      sessionStorage.setItem('refresh_token', refresh_token)
+    changeLoginStatus(_, { payload }): ILoginState {
+      const { login_type, access_token, token_type, refresh_token, login_status } = payload
 
-      return {
-        ...state,
-        access_token, token_type, refresh_token, login_type, login_status
-      }
+      tokenStorage.save({ access_token, token_type, refresh_token, login_status })
+      return { login_type }
     },
 
     clearLoginStatus(): ILoginState {
-      sessionStorage.removeItem('access_token')
-      sessionStorage.removeItem('token_type')
-      sessionStorage.removeItem('refresh_token')
-      return { login_type: 'account', login_status: 'void' }
+      tokenStorage.clear()
+      return { login_type: 'account' }
     }
   },
 };

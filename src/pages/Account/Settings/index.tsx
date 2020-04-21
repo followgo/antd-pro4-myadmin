@@ -2,17 +2,20 @@ import React, { Component } from 'react';
 import { Dispatch, connect } from 'umi';
 import { PageHeaderWrapper, GridContent } from '@ant-design/pro-layout'
 import { Menu } from 'antd';
+import { ConnectState, IUserModelState } from '@/models/connect'
 import BaseView from './components/BaseView';
 import SecurityView from './components/SecurityView';
-import { ConnectState, IUserModelState } from '@/models/connect'
 import styles from './style.less';
 
-const { Item } = Menu;
+const { Item } = Menu
+
 interface SettingsProps {
   dispatch: Dispatch;
-  currentUser: IUserModelState;
+  currentUser: IUserModelState
 }
-type SettingsStateKeys = 'base' | 'security';
+
+type SettingsStateKeys = 'base' | 'security'
+
 interface SettingsState {
   mode: 'inline' | 'horizontal';
   menuMap: {
@@ -39,9 +42,7 @@ class Settings extends Component<SettingsProps, SettingsState> {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch({
-      type: 'accountAndSettings/fetchCurrent',
-    });
+    dispatch({ type: 'user/mysettings' });
     window.addEventListener('resize', this.resize);
     this.resize();
   }
@@ -113,7 +114,7 @@ class Settings extends Component<SettingsProps, SettingsState> {
   render() {
     const { currentUser } = this.props;
 
-    if (!currentUser.userid) {
+    if (!currentUser.uuid) {
       return '';
     }
 
