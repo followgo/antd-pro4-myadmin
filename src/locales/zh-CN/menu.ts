@@ -10,6 +10,7 @@ export default {
   'menu.dashboard.monitor': '监控页',
   'menu.dashboard.workplace': '工作台',
 
+  'menu.exception': 'Exceptions',
   'menu.exception.not-permission': 'Error 403',
   'menu.exception.not-found': 'Error 404',
   'menu.exception.server-error': 'Error 500',

@@ -1,9 +1,8 @@
 import { Checkbox } from 'antd'
 import React, { useState } from 'react'
 import { connect, Dispatch } from 'umi'
-import { ILoginState } from '@/models/login'
 import { ILoginByAccountParamsType } from '@/services/user'
-import { ConnectState } from '@/models/connect'
+import { ConnectState, ILoginState } from '@/models/connect'
 import LoginForm from './components/LoginForm'
 import LoginFailedMsg from './components/LoginFailedMsg'
 
@@ -26,15 +25,14 @@ const Login: React.FC<LoginProps> = (props) => {
 
     const handleSubmit = (values: ILoginByAccountParamsType) => {
         const { dispatch } = props
-        dispatch({ type: 'login/loginByAccount', payload: { ...values, type } })
+        dispatch({ type: 'login/loginByAccount', payload: { ...values } })
     }
 
     return (
         <div className={styles.main}>
             <LoginForm activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>
                 <Tab key="account" tab="账户密码登录">
-                    {login_status === 'error' && login_type === 'account' && !submitting && (<LoginFailedMsg content="账户或密码错误" />)}
-
+                    {login_status === 'aborted' && login_type === 'account' && !submitting && (<LoginFailedMsg content="账户或密码错误" />)}
                     <Username name="username" />
                     <Password name="password" />
                 </Tab>

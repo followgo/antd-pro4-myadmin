@@ -4,7 +4,7 @@ import { ISettingModelState } from './setting'
 import { IUserModelState } from './user'
 import { ILoginState } from './login'
 
-export { IGlobalModelState, ISettingModelState, IUserModelState }
+export { IGlobalModelState, ISettingModelState, IUserModelState, ILoginState }
 
 export interface Loading {
   global: boolean
@@ -15,7 +15,7 @@ export interface Loading {
     setting?: boolean
     user?: boolean
     login?: boolean
-  };
+  }
 }
 
 export interface ConnectState {

@@ -1,8 +1,8 @@
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Input, Upload, Form, message } from 'antd';
-import { connect } from 'umi';
 import React, { Component } from 'react';
-import { CurrentUser } from '../data';
+import { connect } from 'umi'
+import { ConnectState, IUserModelState } from '@/models/connect'
 import styles from './BaseView.less';
 
 const AvatarView = ({ avatar }: { avatar: string }) => (
@@ -22,7 +22,7 @@ const AvatarView = ({ avatar }: { avatar: string }) => (
 )
 
 interface BaseViewProps {
-  currentUser?: CurrentUser;
+  currentUser?: IUserModelState;
 }
 
 class BaseView extends Component<BaseViewProps> {
@@ -63,7 +63,7 @@ class BaseView extends Component<BaseViewProps> {
             hideRequiredMark
           >
             <Form.Item name="uuid" label="唯一识别码">
-              <Input  />
+              <Input />
             </Form.Item>
             <Form.Item
               name="email"
@@ -104,14 +104,6 @@ class BaseView extends Component<BaseViewProps> {
   }
 }
 
-export default connect(
-  ({
-    accountAndSettings,
-  }: {
-    accountAndSettings: {
-      currentUser: CurrentUser;
-    };
-  }) => ({
-    currentUser: accountAndSettings.currentUser,
-  }),
-)(BaseView);
+export default connect(({ user }: ConnectState) => ({
+  currentUser: user,
+}))(BaseView)

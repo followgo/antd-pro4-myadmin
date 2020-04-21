@@ -5,21 +5,20 @@ import { getPageQuery } from '@/utils/utils'
 
 export interface ILoginState {
   login_type: string
-  login_status: string
-  access_token: string
-  token_type: string
-  refresh_token: string
+  login_status: 'ok' | 'aborted' | 'void'
+  access_token?: string
+  token_type?: string
+  refresh_token?: string
 }
 
 export interface ILoginModel {
   namespace: 'login'
-  state: ILoginState 
+  state: ILoginState
   effects: {
     loginByAccount: Effect
     logout: Effect
   }
   reducers: {
-    changeLoginType: Reducer
     changeLoginStatus: Reducer
     clearLoginStatus: Reducer
   }
@@ -28,15 +27,14 @@ export interface ILoginModel {
 const Model: ILoginModel = {
   namespace: 'login',
 
-  state: {},
+  state: { login_type: 'account', login_status: 'void' },
 
   effects: {
     *loginByAccount({ payload }, { call, put }) {
       const res = yield call(loginByAccount, payload)
-      yield put({ type: 'changeLoginType', payload: { login_type: 'account', login_status: res.message } })
 
       if (res.status === 201) {
-        yield put({ type: 'changeLoginStatus', payload: res.data })
+        yield put({ type: 'changeLoginStatus', payload: { ...res.data, login_type: 'account', login_status: 'ok' } })
 
         const urlParams = new URL(window.location.href)
         const params = getPageQuery()
@@ -55,6 +53,15 @@ const Model: ILoginModel = {
           }
         }
         history.replace(redirect || '/')
+
+      } else {
+        yield put({
+          type: 'changeLoginStatus', payload: {
+            login_type: 'account',
+            login_status: 'aborted',
+            access_token: '', token_type: '', refresh_token: ''
+          }
+        })
       }
     },
 
@@ -73,28 +80,23 @@ const Model: ILoginModel = {
   },
 
   reducers: {
-    changeLoginType(state, { payload }): ILoginState {
-      const { login_type, login_status } = payload
-      return { ...state, login_type, login_status }
-    },
-
     changeLoginStatus(state, { payload }): ILoginState {
-      const { access_token, token_type, refresh_token } = payload
+      const { access_token, token_type, refresh_token, login_type, login_status } = payload
       sessionStorage.setItem('access_token', access_token)
       sessionStorage.setItem('token_type', token_type)
       sessionStorage.setItem('refresh_token', refresh_token)
 
       return {
         ...state,
-        access_token, token_type, refresh_token
+        access_token, token_type, refresh_token, login_type, login_status
       }
     },
 
-    clearLoginStatus(): {} {
+    clearLoginStatus(): ILoginState {
       sessionStorage.removeItem('access_token')
       sessionStorage.removeItem('token_type')
       sessionStorage.removeItem('refresh_token')
-      return {}
+      return { login_type: 'account', login_status: 'void' }
     }
   },
 };

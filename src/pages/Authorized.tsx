@@ -1,26 +1,20 @@
-import React from 'react';
-import { Redirect, connect, ConnectProps } from 'umi';
-import Authorized from '@/utils/Authorized';
-import { getRouteAuthority } from '@/utils/utils';
-import { ConnectState, UserModelState } from '@/models/connect';
+import React from 'react'
+import { Redirect, connect, ConnectProps } from 'umi'
+import Authorized from '@/utils/Authorized'
+import { getRouteAuthority } from '@/utils/utils'
+import { ConnectState } from '@/models/connect'
 
 interface AuthComponentProps extends ConnectProps {
-  user: UserModelState;
+  isLogin: boolean
 }
 
 const AuthComponent: React.FC<AuthComponentProps> = ({
   children,
-  route = {
-    routes: [],
-  },
-  location = {
-    pathname: '',
-  },
-  user,
+  route = { routes: [] },
+  location = { pathname: '' },
+  isLogin,
 }) => {
-  const { currentUser } = user;
-  const { routes = [] } = route;
-  const isLogin = currentUser && currentUser.name;
+  const { routes = [] } = route
   return (
     <Authorized
       authority={getRouteAuthority(location.pathname, routes) || ''}
@@ -28,9 +22,9 @@ const AuthComponent: React.FC<AuthComponentProps> = ({
     >
       {children}
     </Authorized>
-  );
-};
+  )
+}
 
-export default connect(({ user }: ConnectState) => ({
-  user,
-}))(AuthComponent);
+export default connect(({ login }: ConnectState) => ({
+  isLogin: login.access_token !== '',
+}))(AuthComponent)

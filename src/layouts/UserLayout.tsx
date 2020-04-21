@@ -53,7 +53,7 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
             <div className={styles.desc}>[ Designed by Bing in 2020 ]</div>
           </div>
           {children}
-        </div>      
+        </div>
       </div>
     </HelmetProvider>
   )

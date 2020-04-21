@@ -3,14 +3,14 @@ import { Dispatch, connect } from 'umi';
 import { PageHeaderWrapper, GridContent } from '@ant-design/pro-layout'
 import { Menu } from 'antd';
 import BaseView from './components/BaseView';
-import { CurrentUser } from './data.d';
 import SecurityView from './components/SecurityView';
+import { ConnectState, IUserModelState } from '@/models/connect'
 import styles from './style.less';
 
 const { Item } = Menu;
 interface SettingsProps {
   dispatch: Dispatch;
-  currentUser: CurrentUser;
+  currentUser: IUserModelState;
 }
 type SettingsStateKeys = 'base' | 'security';
 interface SettingsState {
@@ -120,43 +120,35 @@ class Settings extends Component<SettingsProps, SettingsState> {
     const { mode, selectKey } = this.state;
     return (
       <PageHeaderWrapper title={false}>
-      <GridContent>
-        <div
-          className={styles.main}
-          ref={ref => {
-            if (ref) {
-              this.main = ref;
-            }
-          }}
-        >
-          <div className={styles.leftMenu}>
-            <Menu
-              mode={mode}
-              selectedKeys={[selectKey]}
-              onClick={({ key }) => this.selectKey(key as SettingsStateKeys)}
-            >
-              {this.getMenu()}
-            </Menu>
+        <GridContent>
+          <div
+            className={styles.main}
+            ref={ref => {
+              if (ref) {
+                this.main = ref;
+              }
+            }}
+          >
+            <div className={styles.leftMenu}>
+              <Menu
+                mode={mode}
+                selectedKeys={[selectKey]}
+                onClick={({ key }) => this.selectKey(key as SettingsStateKeys)}
+              >
+                {this.getMenu()}
+              </Menu>
+            </div>
+            <div className={styles.right}>
+              <div className={styles.title}>{this.getRightTitle()}</div>
+              {this.renderChildren()}
+            </div>
           </div>
-          <div className={styles.right}>
-            <div className={styles.title}>{this.getRightTitle()}</div>
-            {this.renderChildren()}
-          </div>
-        </div>
-      </GridContent>
+        </GridContent>
       </PageHeaderWrapper>
     );
   }
 }
 
-export default connect(
-  ({
-    accountAndSettings,
-  }: {
-    accountAndSettings: {
-      currentUser: CurrentUser;
-    };
-  }) => ({
-    currentUser: accountAndSettings.currentUser,
-  }),
-)(Settings);
+export default connect(({ user }: ConnectState) => ({
+  currentUser: user,
+}))(Settings)
