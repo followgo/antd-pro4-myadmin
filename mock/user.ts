@@ -159,12 +159,12 @@ export default {
     // 修补
     'PATCH /user/accounts/:uuid': (req: Request, res: Response) => {
         const uuid: string = req.param('uuid')
-        const { data, patch_fields } = req.body
+        const { params, patch_fields } = req.body
 
         const existing = mockAccounts.some((value, index) => {
             if (value.uuid === uuid) {
                 (patch_fields as string[]).forEach(field => {
-                    mockAccounts[index][field] = (data as IUserAccount)[field]
+                    mockAccounts[index][field] = (params as IUserAccount)[field]
                 })
 
                 setTimeout(() => res.status(201).send({
