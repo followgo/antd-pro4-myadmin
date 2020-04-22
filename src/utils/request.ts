@@ -2,10 +2,9 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
-import { extend } from 'umi-request'
+import { extend, RequestOptionsInit } from 'umi-request';
 import { notification } from 'antd'
-import tokenStorage from './tokenStorage'
-import { useDispatch } from 'umi'
+import tokenStorage, { refreshToken } from './tokenStorage'
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -25,15 +24,21 @@ const codeMessage = {
   504: '网关超时。',
 }
 
-interface IErrorData {
+export interface IErrorResponseData {
   status: number
   message: string
+}
+
+export interface IBaseResponseData<T = any> {
+  status: number
+  message: string
+  data: T
 }
 
 /**
  * 异常处理程序
  */
-const errorHandler = (error: { response: Response, data: IErrorData }): Response => {
+const errorHandler = (error: { response: Response, data: IErrorResponseData }): Response => {
   const { response, data: errData } = error
 
   if (response && response.status) {
@@ -52,35 +57,30 @@ const errorHandler = (error: { response: Response, data: IErrorData }): Response
 const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
-  timeout: 1000 * 5,
+  timeout: 1000 * 8,
 })
 
-// 请求添加 token
-request.interceptors.request.use(async (url, options) => {
-  const { access_token = '', refresh_token = '', token_obtain_at = '0', token_type = '', token_expires_in = '0' } = tokenStorage.get()
+// 添加 token, 自动刷新 token
+request.interceptors.request.use(async (url: string, options: RequestOptionsInit) => {
+  const { access_token = '', token_obtain_at = '0', token_expires_in = '0' } = tokenStorage.get()
+  let current_access_token = access_token
 
-  if (access_token) {
+  // access_token 为空，则跳过
+  if (!access_token) return ({ url, options })
 
-    if (refresh_token && token_expires_in !== '0') {
-      const dispatch = useDispatch();
+  // 跳过 登陆 和 刷新token 的请求
+  if (['/user/login/account', '/user/refresh_token'].indexOf(url) !== -1) return ({ url, options })
 
-      // 检查 token 的有效期
-      const duration = new Date().getTime() - new Date(token_obtain_at).getTime()  // 单位 ms
-      const lifeTime = parseInt(token_expires_in, 10) - duration / 1000
-      if (lifeTime < 5) { // 已经过期，或者 5 秒的时间内过期
-        await dispatch('logon/refreshAccessToken')
-
-      } else if (lifeTime < 300) { // 5 分钟要过期
-        dispatch('logon/refreshAccessToken')
-      }
-    }
-
-
-
-
+  // 检查 token 剩余的生命
+  // 如果已经过期，或者立即过期，则刷新 token
+  const lifetime = parseInt(token_expires_in, 10) * 1000 - (new Date().getTime() - new Date(token_obtain_at).getTime())
+  if (lifetime < 1000 * 10) { // 剩余的生命少于 10 秒
+    current_access_token = await refreshToken()
   }
 
-
+  const { headers = [] } = options
+  headers['X-AUTH-TOKEN'] = current_access_token
+  return ({ url, options: { ...options, headers } })
 })
 
 export default request

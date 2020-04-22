@@ -1,4 +1,6 @@
 import request from '@/utils/request'
+import { DefaultHeader } from '@ant-design/pro-layout'
+import { RequestOptionsInit } from 'umi-request';
 
 export interface ILoginByAccountParamsType {
   username: string
@@ -19,11 +21,6 @@ export interface IUserAccount {
 // 使用用户名和密码登入系统
 export async function loginByAccount(params: ILoginByAccountParamsType) {
   return request('/user/login/account', { method: 'POST', data: params })
-}
-
-// 刷新token
-export async function refreshToken(){
-  return request.post('/user/refresh_token')
 }
 
 // 登出系统

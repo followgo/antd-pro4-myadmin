@@ -1,6 +1,6 @@
 import { stringify } from 'querystring'
 import { history, Reducer, Effect } from 'umi'
-import { loginByAccount, refreshToken, logout } from '@/services/user'
+import { loginByAccount, logout } from '@/services/user'
 import { getPageQuery } from '@/utils/utils'
 import tokenStorage from '@/utils/tokenStorage'
 
@@ -13,12 +13,10 @@ export interface ILoginModel {
   state: ILoginState
   effects: {
     loginByAccount: Effect
-    refreshToken: Effect
     logout: Effect
   }
   reducers: {
     changeLoginStatus: Reducer
-    refreshAccessToken: Reducer
     clearLoginStatus: Reducer
   }
 }
@@ -64,25 +62,6 @@ const Model: ILoginModel = {
       }
     },
 
-    *refreshToken(_, { call, put }) {
-      const res = yield call(refreshToken)
-
-      if (res.status === 201) {
-        yield put({ type: 'changeLoginStatus', payload: { ...res.data, login_type: 'account', login_status: 'ok' } })
-
-      } else {
-
-        yield put({
-          type: 'changeLoginStatus', payload: {
-            login_type: 'account',
-            login_status: 'nothing',
-            access_token: '', token_type: '', refresh_token: '', expires_in: 0
-          }
-        })
-
-      }
-    },
-
     *logout(_, { call, put }) {
       yield call(logout)
       put({ type: 'clearLoginStatus' })
@@ -108,11 +87,6 @@ const Model: ILoginModel = {
         token_expires_in: expires_in.toString(),
       })
       return { login_type }
-    },
-
-    refreshAccessToken(_, { payload }) {
-      const { access_token, token_type, expires_in = 0 } = payload
-      tokenStorage.refreshAccessToken(access_token, token_type, expires_in.toString())
     },
 
     clearLoginStatus(): ILoginState {
