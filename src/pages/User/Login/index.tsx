@@ -33,7 +33,7 @@ const Login: React.FC<LoginProps> = (props) => {
         <div className={styles.main}>
             <LoginForm activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>
                 <Tab key="account" tab="本地账号登录">
-                    {login_status === 'aborted' && login_type === 'account' && !submitting && (<LoginFailedMsg content="账户或密码错误" />)}
+                    {login_status === 'aborted' && login_type === 'account' && !submitting && (<LoginFailedMsg content="账号或密码错误" />)}
                     <NameOrEmail name="name_or_email" />
                     <Password name="password" />
                 </Tab>

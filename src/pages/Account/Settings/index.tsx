@@ -99,7 +99,7 @@ class Settings extends Component<SettingsProps, SettingsState> {
 
     switch (selectKey) {
       case 'base':
-        return <BaseView />;
+        return <BaseView />
 
       case 'security':
         return <SecurityView />

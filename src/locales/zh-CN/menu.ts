@@ -15,7 +15,7 @@ export default {
   'menu.exception.not-found': 'Error 404',
   'menu.exception.server-error': 'Error 500',
 
-  'menu.account': '账户',
+  'menu.account': '用户账号',
   'menu.account.center': '个人中心',
   'menu.account.settings': '个人设置',
   'menu.account.logout': '退出登录',
