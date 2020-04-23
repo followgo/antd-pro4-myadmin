@@ -1,13 +1,13 @@
 import request from '@/utils/request'
 
 export interface ILoginByAccountParamsType {
-  username: string
+  name_or_email: string
   password: string
 }
 
 export interface IUserAccount {
   uuid: string,
-  username?: string,
+  account_name?: string,
   password?: string,
   email?: string,
   nickname?: string,

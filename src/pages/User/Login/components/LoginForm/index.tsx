@@ -3,13 +3,12 @@ import React, { useState } from 'react'
 import useMergeValue from 'use-merge-value'
 import classNames from 'classnames'
 import { FormInstance } from 'antd/es/form'
-import { LoginParamsType } from '@/services/login'
-
+import { ILoginByAccountParamsType } from '@/services/user'
 import LoginContext from './LoginContext'
 import LoginTab from './LoginTab'
 import LoginSubmitButton from './LoginSubmitButton'
 import { IFormItemProps } from './formItem.d'
-import FormItemUsername from './FormItemUsername'
+import FormItemNameOrEmail from './FormItemNameOrEmail'
 import FormItemPassword from './FormItemPassword'
 import styles from './index.less'
 
@@ -17,7 +16,7 @@ export interface ILoginProps {
     activeKey?: string
     onTabChange?: (key: string) => void
     style?: React.CSSProperties
-    onSubmit?: (values: LoginParamsType) => void
+    onSubmit?: (values: ILoginByAccountParamsType) => void
     className?: string
     from?: FormInstance
     children: React.ReactElement<typeof LoginTab>[]
@@ -26,7 +25,7 @@ export interface ILoginProps {
 interface ILoginType extends React.FC<ILoginProps> {
     Tab: typeof LoginTab
     Submit: typeof LoginSubmitButton
-    Username: React.FunctionComponent<IFormItemProps>
+    NameOrEmail: React.FunctionComponent<IFormItemProps>
     Password: React.FunctionComponent<IFormItemProps>
 }
 
@@ -111,7 +110,7 @@ const Login: ILoginType = (props) => {
 
 Login.Tab = LoginTab
 Login.Submit = LoginSubmitButton
-Login.Username = FormItemUsername
+Login.NameOrEmail = FormItemNameOrEmail
 Login.Password = FormItemPassword
 
 export default Login

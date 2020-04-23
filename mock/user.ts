@@ -5,7 +5,7 @@ import { IUserAccount } from '@/services/user'
 let mockAccounts: IUserAccount[] = [
     {
         uuid: '8612691e-878f-4db5-befd-476d5e313d01',
-        username: 'admin',
+        account_name: 'admin',
         password: 'admin',
         nickname: Random.name(),
         email: 'admin@localhost',
@@ -14,7 +14,7 @@ let mockAccounts: IUserAccount[] = [
     },
     {
         uuid: '8612691e-878f-4db5-befd-476d5e313d02',
-        username: 'user',
+        account_name: 'user',
         password: 'user',
         nickname: Random.name(),
         email: 'user@localhost',
@@ -23,7 +23,7 @@ let mockAccounts: IUserAccount[] = [
     },
     {
         uuid: '8612691e-878f-4db5-befd-476d5e313d93',
-        username: 'guest',
+        account_name: 'guest',
         password: 'guest',
         nickname: Random.name(),
         email: 'guest@localhost',
@@ -33,7 +33,7 @@ let mockAccounts: IUserAccount[] = [
     ...mock({
         "array|2-10": [{
             uuid: Random.guid(),
-            username: Random.word(4, 10),
+            account_name: Random.word(4, 10),
             password: '',
             nickname: Random.name(),
             email: Random.email(),
@@ -48,10 +48,10 @@ let currentUserUUID: string = ''
 export default {
     // 用户登入
     'POST /user/login/account': (req: Request, res: Response) => {
-        const { password, username } = req.body
+        const { password, name_or_email } = req.body
 
         const existing = mockAccounts.some(value => {
-            if ((value.username === username || value.email === username) &&
+            if ((value.account_name === name_or_email || value.email === name_or_email) &&
                 value.password === password && value.enabled) {
                 currentUserUUID = value.uuid
 
@@ -158,7 +158,7 @@ export default {
 
     // 修补
     'PATCH /user/accounts/:uuid': (req: Request, res: Response) => {
-        const uuid: string = req.param('uuid')
+        const { uuid } = req.params
         const { params, patch_fields } = req.body
 
         const existing = mockAccounts.some((value, index) => {

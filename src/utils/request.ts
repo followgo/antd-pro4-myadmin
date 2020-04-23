@@ -2,8 +2,11 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
-import { extend, RequestOptionsInit } from 'umi-request';
+import { extend, RequestOptionsInit } from 'umi-request'
+import { history } from 'umi'
 import { notification } from 'antd'
+import { parse as urlParse } from 'url'
+import { stringify } from 'querystring'
 import tokenStorage, { refreshToken } from './tokenStorage'
 
 const codeMessage = {
@@ -44,8 +47,15 @@ const errorHandler = (error: { response: Response, data: IErrorResponseData }): 
   if (response && response.status) {
     const errorText = errData.message || (codeMessage[response.status] || response.statusText)
     notification.error({ message: `请求错误（${response.status}）`, description: errorText })
+
+    // 非登陆请求的响应遇到 401 错误，则跳转到登陆页面
+    if (response.status === 401 && urlParse(response.url).path !== '/user/login/account') {
+      const queryString = stringify({ redirect: window.location.href })
+      history.push(`/user/login?${queryString}`)
+    }
+
   } else if (!response) {
-    notification.error({ description: '您的网络发生异常，无法连接服务器', message: '网络异常' })
+    notification.error({ description: '您的网络发生异常，无法连接到服务器', message: '网络异常' })
   }
 
   return response

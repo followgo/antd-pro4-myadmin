@@ -36,7 +36,7 @@ class BaseView extends React.Component<IBaseViewProps> {
   handleFinish = (values: Store) => {
     const { dispatch } = this.props
     if (dispatch) {
-      dispatch({ type: 'user/changeMySettings', payload: { data: values, patch_fields: ['username', 'nickname', 'email'] } })
+      dispatch({ type: 'user/changeMySettings', payload: { data: values, patch_fields: ['account_name', 'nickname', 'email'] } })
     }
   };
 
@@ -57,8 +57,8 @@ class BaseView extends React.Component<IBaseViewProps> {
               <Input />
             </Form.Item>
 
-            <Form.Item name="username" label="用户名" rules={[
-              { required: true, message: '请输入账户名称' },
+            <Form.Item name="account_name" label="登陆账号" rules={[
+              { required: true, message: '请输入登陆账号' },
             ]}>
               <Input />
             </Form.Item>

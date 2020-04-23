@@ -9,12 +9,12 @@ const formItemOptions = {
     props: {
         size: 'large',
         prefix: <UserOutlined style={{ color: '#1890ff' }} className={styles.prefixIcon} />,
-        placeholder: '用户名 或 邮箱',
+        placeholder: '登陆账号 或 邮箱',
     },
     rules: [
         {
             required: true,
-            message: '请输入用户名',
+            message: '请输入登陆账号或邮箱',
         },
     ],
 }
