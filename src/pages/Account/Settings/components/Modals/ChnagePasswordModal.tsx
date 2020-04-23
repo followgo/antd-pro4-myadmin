@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Modal, Form, Input, message, } from 'antd'
 import { Store } from 'antd/es/form/interface'
 import { patchUserAccount } from '@/services/user'
@@ -17,12 +17,13 @@ interface IChangePasswordModalProps {
 
 const ChangePasswordModal: React.FC<IChangePasswordModalProps> = ({ userUUID, visible, onDestroy }) => {
     const [loading, setLoading] = useState(false)
-    const [form] = Form.useForm()
 
-    const handleDestroy = () => {
-        onDestroy()
-        form.resetFields()
-    }
+    const [form] = Form.useForm()
+    useEffect(() => {
+        if (form && !visible) form.resetFields()
+    }, [visible])
+
+    const handleDestroy = () => onDestroy()
 
     const layout = { labelCol: { span: 8 }, wrapperCol: { span: 16 } }
 

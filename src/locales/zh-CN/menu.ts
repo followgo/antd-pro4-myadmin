@@ -18,5 +18,6 @@ export default {
   'menu.account': '用户账号',
   'menu.account.center': '个人中心',
   'menu.account.settings': '个人设置',
+  'menu.account.management_users': '管理用户',
   'menu.account.logout': '退出登录',
 }

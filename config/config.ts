@@ -34,7 +34,9 @@ export default defineConfig({
           path: '/user/login',
           component: './Login',
         },
-        { component: './Exception/404-ToLogin' },
+        {
+          component: './Exception/404-ToLogin',
+        },
       ],
     },
     {
@@ -68,13 +70,19 @@ export default defineConfig({
                   component: './Account/Settings',
                 },
                 {
+                  name: 'management_users',
+                  icon: 'ProfileOutlined',
+                  path: '/account/management_users',
+                  component: './Account/ManagementUsers',
+                },
+                {
                   component: './Exception/404',
                 },
-              ]
-            },
-            // 错误页面
+              ],
+            }, // 错误页面
             {
-              hideInMenu: true, // 路由不显示在菜单中
+              hideInMenu: true,
+              // 路由不显示在菜单中
               name: 'exception',
               icon: 'WarningOutlined',
               path: '/exception',
@@ -97,16 +105,24 @@ export default defineConfig({
                   icon: 'WarningOutlined',
                   component: './Exception/500',
                 },
-                { component: './Exception/404' },
+                {
+                  component: './Exception/404',
+                },
               ],
             },
-            { component: './Exception/404' },
+            {
+              component: './Exception/404',
+            },
           ],
         },
-        { component: './Exception/404' },
+        {
+          component: './Exception/404',
+        },
       ],
     },
-    { component: './Exception/404' },
+    {
+      component: './Exception/404',
+    },
   ],
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
