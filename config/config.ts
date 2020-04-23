@@ -32,7 +32,7 @@ export default defineConfig({
         {
           name: 'login',
           path: '/user/login',
-          component: './User/Login',
+          component: './Login',
         },
         { component: './Exception/404-ToLogin' },
       ],

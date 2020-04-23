@@ -53,7 +53,7 @@ class SecurityView extends Component<ISecurityViewProps> {
     if (currentUser && currentUser.password) {
       if (currentUser.password.length > 8) {
         pwdStrength = passwordStrength.strong
-      } else if (currentUser.password.length > 6) {
+      } else if (currentUser.password.length >= 6) {
         pwdStrength = passwordStrength.medium
       } else {
         pwdStrength = passwordStrength.weak

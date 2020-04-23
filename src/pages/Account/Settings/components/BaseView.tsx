@@ -53,6 +53,7 @@ class BaseView extends React.Component<IBaseViewProps> {
 
             <Form.Item name="email" label="邮箱" rules={[
               { required: true, message: '请输入邮箱' },
+              { type: 'email', message: '请输入有效的邮箱地址' },
             ]}>
               <Input />
             </Form.Item>

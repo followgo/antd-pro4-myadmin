@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { mock, Random } from 'mockjs'
 import { IUserAccount } from '@/services/user'
-import { message } from 'antd';
 
 let mockAccounts: IUserAccount[] = [
     {
@@ -131,30 +130,6 @@ export default {
         const data: IUserAccount = req.body
         data.uuid = Random.guid()
         res.status(201).send({ status: 201, message: '成功', data })
-    },
-
-    // 替换
-    'PUT /user/accounts/:uuid': (req: Request, res: Response) => {
-        const uuid: string = req.param('uuid')
-        const data: IUserAccount = req.body
-        data.uuid = uuid
-
-        const existing = mockAccounts.some((value, index) => {
-            if (value.uuid === uuid) {
-                mockAccounts[index] = data
-                setTimeout(() => res.status(201).send({
-                    status: 201,
-                    message: '成功',
-                    data: mockAccounts[index],
-                }), 1000)
-                return true
-            }
-            return false
-        })
-
-        if (!existing) {
-            res.status(404).send({ status: 404, message: '该用户不存在' })
-        }
     },
 
     // 修补
