@@ -29,9 +29,9 @@ const RadioGroup = Radio.Group;
 const { Search } = Input;
 
 interface BaseicListProps {
-  demoAndBaseicList: StateType;
-  dispatch: Dispatch<any>;
-  loading: boolean;
+  demoAndBaseicList: StateType
+  dispatch: Dispatch
+  loading: boolean
 }
 
 const Info: FC<{
@@ -51,20 +51,20 @@ const ListContent = ({
 }: {
   data: BasicListItemDataType;
 }) => (
-  <div className={styles.listContent}>
-    <div className={styles.listContentItem}>
-      <span>Owner</span>
-      <p>{owner}</p>
+    <div className={styles.listContent}>
+      <div className={styles.listContentItem}>
+        <span>Owner</span>
+        <p>{owner}</p>
+      </div>
+      <div className={styles.listContentItem}>
+        <span>开始时间</span>
+        <p>{moment(createdAt).format('YYYY-MM-DD HH:mm')}</p>
+      </div>
+      <div className={styles.listContentItem}>
+        <Progress percent={percent} status={status} strokeWidth={6} style={{ width: 180 }} />
+      </div>
     </div>
-    <div className={styles.listContentItem}>
-      <span>开始时间</span>
-      <p>{moment(createdAt).format('YYYY-MM-DD HH:mm')}</p>
-    </div>
-    <div className={styles.listContentItem}>
-      <Progress percent={percent} status={status} strokeWidth={6} style={{ width: 180 }} />
-    </div>
-  </div>
-);
+  );
 
 export const BaseicList: FC<BaseicListProps> = (props) => {
   const addBtn = useRef(null);
