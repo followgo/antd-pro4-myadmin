@@ -1,5 +1,5 @@
 import { MenuDataItem } from '@ant-design/pro-layout'
-import { IUserAccount as IUserState } from '@/service/user'
+import { IUserAccount as IUserState } from '@/services/user'
 import { IGlobalState } from './global'
 import { ISettingState } from './setting'
 import { ILoginState } from './login'

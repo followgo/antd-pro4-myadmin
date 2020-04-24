@@ -1,6 +1,6 @@
 import { Button, Input, Form } from 'antd'
 import React from 'react'
-import { connect, ConnectProps } from 'umi'
+import { connect, Dispatch } from 'umi'
 import { ConnectState, IUserState } from '@/models/connect'
 import { Store } from 'antd/es/form/interface'
 import styles from './BaseView.less'
@@ -21,8 +21,9 @@ import styles from './BaseView.less'
 //   </>
 // )
 
-interface IBaseViewProps extends ConnectProps {
-  currentUser?: IUserState
+interface IBaseViewProps {
+  dispatch: Dispatch
+  currentUser: IUserState
   submitting?: boolean
 }
 
@@ -86,7 +87,6 @@ class BaseView extends React.Component<IBaseViewProps> {
   }
 }
 
-export default connect(({ current_user, loading }: ConnectState) => ({
-  currentUser: current_user,
+export default connect(({ loading }: ConnectState) => ({
   submitting: loading.effects['current_user/changeMySettings'],
 }))(BaseView)

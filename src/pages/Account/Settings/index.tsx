@@ -9,14 +9,14 @@ import styles from './style.less';
 
 const { Item } = Menu
 
-interface SettingsProps {
+interface IMySettingsProps {
   dispatch: Dispatch;
   currentUser: IUserState
 }
 
 type SettingsStateKeys = 'base' | 'security'
 
-interface SettingsState {
+interface IMySettingsState {
   mode: 'inline' | 'horizontal';
   menuMap: {
     [key: string]: React.ReactNode;
@@ -24,10 +24,10 @@ interface SettingsState {
   selectKey: SettingsStateKeys;
 }
 
-class Settings extends Component<SettingsProps, SettingsState> {
+class Settings extends Component<IMySettingsProps, IMySettingsState> {
   main: HTMLDivElement | undefined = undefined;
 
-  constructor(props: SettingsProps) {
+  constructor(props: IMySettingsProps) {
     super(props);
     const menuMap = {
       base: '基本设置',
@@ -99,10 +99,10 @@ class Settings extends Component<SettingsProps, SettingsState> {
 
     switch (selectKey) {
       case 'base':
-        return <BaseView />
+        return <BaseView currentUser={this.props.currentUser} />
 
       case 'security':
-        return <SecurityView />
+        return <SecurityView currentUser={this.props.currentUser} />
 
       default:
         break;

@@ -1,9 +1,12 @@
-import { IUserAccount } from "@/services/user";
+import React from 'react'
+import { IUserState } from '@/models/connect'
+import styles from '../style.less'
 
-const ListContent = ({ data: { owner, createdAt, percent, status }, }: { data: IUserAccount }) => (
+
+const ListContent = (user: IUserState) => (
     <div className={styles.listContent}>
         <div className={styles.listContentItem}>
-            <span>Owner</span>
+            <span>唯一</span>
             <p>{owner}</p>
         </div>
         <div className={styles.listContentItem}>

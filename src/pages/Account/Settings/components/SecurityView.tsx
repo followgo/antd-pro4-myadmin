@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { List } from 'antd'
-import { ConnectState, IUserState } from '@/models/connect'
-import { connect, ConnectProps } from 'umi'
+import { connect, Dispatch } from 'umi'
+import { IUserState } from '@/models/connect'
 import ChangePasswordModal from './Modals/ChnagePasswordModal'
 import './SecurityView.less'
 
@@ -13,7 +13,8 @@ const passwordStrength = {
   weak: <span className="weak">不安全</span>,
 }
 
-interface ISecurityViewProps extends ConnectProps {
+interface ISecurityViewProps {
+  dispatch: Dispatch
   currentUser: IUserState
 }
 
@@ -78,6 +79,4 @@ class SecurityView extends Component<ISecurityViewProps> {
   }
 }
 
-export default connect(({ current_user }: ConnectState) => ({
-  currentUser: current_user,
-}))(SecurityView)
+export default connect()(SecurityView)

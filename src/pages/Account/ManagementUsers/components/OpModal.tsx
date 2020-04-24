@@ -79,7 +79,7 @@ const OpModal: FC<OperationModalProps> = ({ done, visible, current, onDone, onCa
     }
 
     return (
-        <Modal
+        <Modal getContainer={false}
             title={`任务${current ? '编辑' : '添加'}`}
             className={styles.standardListForm}
             width={640}
