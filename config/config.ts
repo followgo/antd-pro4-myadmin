@@ -69,12 +69,12 @@ export default defineConfig({
                   path: '/account/settings',
                   component: './Account/Settings',
                 },
-                {
-                  name: 'management_users',
-                  icon: 'ProfileOutlined',
-                  path: '/account/management_users',
-                  component: './Account/ManagementUsers',
-                },
+                // {
+                //   name: 'management_users',
+                //   icon: 'ProfileOutlined',
+                //   path: '/account/management_users',
+                //   component: './Account/ManagementUsers',
+                // },
                 {
                   component: './Exception/404',
                 },

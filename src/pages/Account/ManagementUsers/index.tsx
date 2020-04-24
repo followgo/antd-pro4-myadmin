@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { DownOutlined, PlusOutlined } from '@ant-design/icons'
 import { Avatar, Button, Card, Col, Dropdown, Input, List, Menu, Modal, Progress, Radio, Row, } from 'antd'
-import { IUserAccount } from '@/services/user'
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import styles from './style.less'
 

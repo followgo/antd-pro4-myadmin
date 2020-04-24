@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dispatch, connect } from 'umi';
 import { PageHeaderWrapper, GridContent } from '@ant-design/pro-layout'
 import { Menu } from 'antd';
-import { ConnectState, IUserModelState } from '@/models/connect'
+import { ConnectState, IUserState } from '@/models/connect'
 import BaseView from './components/BaseView';
 import SecurityView from './components/SecurityView';
 import styles from './style.less';
@@ -11,7 +11,7 @@ const { Item } = Menu
 
 interface SettingsProps {
   dispatch: Dispatch;
-  currentUser: IUserModelState
+  currentUser: IUserState
 }
 
 type SettingsStateKeys = 'base' | 'security'
@@ -42,7 +42,7 @@ class Settings extends Component<SettingsProps, SettingsState> {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch({ type: 'user/mysettings' });
+    dispatch({ type: 'current_user/mysettings' });
     window.addEventListener('resize', this.resize);
     this.resize();
   }
@@ -150,6 +150,6 @@ class Settings extends Component<SettingsProps, SettingsState> {
   }
 }
 
-export default connect(({ user }: ConnectState) => ({
-  currentUser: user,
+export default connect(({ current_user }: ConnectState) => ({
+  currentUser: current_user
 }))(Settings)

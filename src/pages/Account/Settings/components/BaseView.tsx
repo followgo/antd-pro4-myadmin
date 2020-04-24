@@ -1,7 +1,7 @@
 import { Button, Input, Form } from 'antd'
 import React from 'react'
 import { connect, ConnectProps } from 'umi'
-import { ConnectState, IUserModelState } from '@/models/connect'
+import { ConnectState, IUserState } from '@/models/connect'
 import { Store } from 'antd/es/form/interface'
 import styles from './BaseView.less'
 
@@ -22,7 +22,7 @@ import styles from './BaseView.less'
 // )
 
 interface IBaseViewProps extends ConnectProps {
-  currentUser?: IUserModelState
+  currentUser?: IUserState
   submitting?: boolean
 }
 
@@ -36,7 +36,7 @@ class BaseView extends React.Component<IBaseViewProps> {
   handleFinish = (values: Store) => {
     const { dispatch } = this.props
     if (dispatch) {
-      dispatch({ type: 'user/changeMySettings', payload: { data: values, patch_fields: ['account_name', 'nickname', 'email'] } })
+      dispatch({ type: 'current_user/changeMySettings', payload: { data: values, patch_fields: ['account_name', 'nickname', 'email'] } })
     }
   };
 
@@ -86,7 +86,7 @@ class BaseView extends React.Component<IBaseViewProps> {
   }
 }
 
-export default connect(({ user, loading }: ConnectState) => ({
-  currentUser: user,
-  submitting: loading.effects['user/changeMySettings'],
+export default connect(({ current_user, loading }: ConnectState) => ({
+  currentUser: current_user,
+  submitting: loading.effects['current_user/changeMySettings'],
 }))(BaseView)

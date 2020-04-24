@@ -25,7 +25,7 @@ const ChangePasswordModal: React.FC<IChangePasswordModalProps> = ({ userUUID, vi
 
     const handleDestroy = () => onDestroy()
 
-    const layout = { labelCol: { span: 8 }, wrapperCol: { span: 16 } }
+    const layout = { labelCol: { span: 8 }, wrapperCol: { span: 12 } }
 
     const handleOk = (values: Store) => {
         const formValues = (values as IFormValues)
@@ -46,7 +46,7 @@ const ChangePasswordModal: React.FC<IChangePasswordModalProps> = ({ userUUID, vi
     }
 
     return (
-        <Modal title="重置登陆账号的密码" visible={visible} confirmLoading={loading} onCancel={handleDestroy}
+        <Modal getContainer={false} title="重置登陆账号的密码" visible={visible} confirmLoading={loading} onCancel={handleDestroy}
             onOk={() => {
                 form.validateFields()
                     .then(values => {

@@ -3,14 +3,14 @@ import { Avatar, Menu, Spin } from 'antd'
 import { ClickParam } from 'antd/es/menu'
 import React from 'react'
 import { history, ConnectProps, connect } from 'umi'
-import { ConnectState, IUserModelState } from '@/models/connect'
+import { ConnectState, IUserState } from '@/models/connect'
 import UserDefaultAvatar from '@/assets/userDefaultAvatar.png'
 import HeaderDropdown from '../HeaderDropdown'
 import styles from './index.less'
 
 export interface GlobalHeaderRightProps extends Partial<ConnectProps> {
-  currentUser?: IUserModelState;
-  menu?: boolean;
+  currentUser?: IUserState
+  menu?: boolean
 }
 
 class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
@@ -70,7 +70,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
   }
 }
 
-export default connect(({ user }: ConnectState) => ({
-  currentUser: user,
+export default connect(({ current_user }: ConnectState) => ({
+  currentUser: current_user,
   menu: true,
 }))(AvatarDropdown);

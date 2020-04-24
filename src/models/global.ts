@@ -1,15 +1,15 @@
 import { Subscription, Reducer } from 'umi'
 
-export interface IGlobalModelState {
+export interface IGlobalState {
   collapsed: boolean
 }
 
 export interface IGlobalModel {
   namespace: 'global'
-  state: IGlobalModelState
+  state: IGlobalState
   effects: {}
   reducers: {
-    changeLayoutCollapsed: Reducer<IGlobalModelState>
+    changeLayoutCollapsed: Reducer<IGlobalState>
   };
   subscriptions: { setup: Subscription }
 }

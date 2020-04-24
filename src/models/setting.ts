@@ -1,13 +1,13 @@
 import { Reducer } from 'umi';
 import defaultSettings, { DefaultSettings } from '../../config/defaultSettings'
 
-export interface ISettingModelState extends DefaultSettings { }
+export interface ISettingState extends DefaultSettings { }
 
 export interface ISettingModel {
   namespace: 'settings'
-  state: ISettingModelState
+  state: ISettingState
   reducers: {
-    changeSetting: Reducer<ISettingModelState>
+    changeSetting: Reducer<ISettingState>
   };
 }
 

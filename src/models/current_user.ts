@@ -3,24 +3,22 @@ import { setAuthority } from '@/utils/authority'
 import { IUserAccount, queryMySettings, patchUserAccount } from '@/services/user'
 import { message } from 'antd'
 
-export interface IUserModelState extends IUserAccount { }
-
-export interface IUserModel {
-  namespace: 'user'
-  state: IUserModelState | {}
+export interface ICurrentUserModel {
+  namespace: 'current_user'
+  state: IUserAccount
   effects: {
     fetchMySettings: Effect
     changeMySettings: Effect
   }
   reducers: {
-    saveMySettings: Reducer<IUserModelState>
+    saveMySettings: Reducer<IUserAccount>
   }
 }
 
-const Model: IUserModel = {
-  namespace: 'user',
+const Model: ICurrentUserModel = {
+  namespace: 'current_user',
 
-  state: {},
+  state: { uuid: '' },
 
   effects: {
     *fetchMySettings(_, { call, put }) {
