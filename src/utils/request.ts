@@ -2,9 +2,9 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
-import { extend, RequestOptionsInit } from 'umi-request'
+import { extend } from 'umi-request'
 import { history } from 'umi'
-import { notification } from 'antd'
+import { notification, message } from 'antd'
 import { parse as urlParse } from 'url'
 import { stringify } from 'querystring'
 import tokenStorage, { refreshToken } from './tokenStorage'
@@ -71,7 +71,7 @@ const request = extend({
 })
 
 // 添加 token, 自动刷新 token
-request.interceptors.request.use(async (url: string, options: RequestOptionsInit) => {
+request.interceptors.request.use(async (url, options) => {
   const { access_token = '', token_obtain_at = '0', token_expires_in = '0' } = tokenStorage.get()
   let current_access_token = access_token
 
@@ -91,6 +91,19 @@ request.interceptors.request.use(async (url: string, options: RequestOptionsInit
   const { headers = [] } = options
   headers['X-AUTH-TOKEN'] = current_access_token
   return ({ url, options: { ...options, headers } })
+})
+
+request.interceptors.response.use((res) => {
+  if (res.status === 201) {
+    // 登陆和登出不提示
+    if (['/user/login/account', '/user/logout'].indexOf(urlParse(res.url).path || '') === -1) {
+      message.success(codeMessage[res.status])
+    }
+
+  } else if (res.status === 202 || res.status === 204) {
+    message.success(codeMessage[res.status])
+  }
+  return res
 })
 
 export default request

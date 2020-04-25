@@ -1,58 +1,49 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Form, Input, message, } from 'antd'
+import { Modal, Form, Input, message, notification, } from 'antd'
 import { Store } from 'antd/es/form/interface'
 import { patchUserAccount } from '@/services/user'
-import { history } from 'umi'
+import { history, connect, Dispatch } from 'umi'
+import { ConnectState } from '@/models/connect'
 
 interface IFormValues {
+    uuid: string
     password: string
     new_password: string
 }
 
 interface IChangePasswordModalProps {
+    dispatch: Dispatch
     userUUID: string
     visible: boolean
+    submitting?: boolean
     onDestroy: () => void
 }
 
-const ChangePasswordModal: React.FC<IChangePasswordModalProps> = ({ userUUID, visible, onDestroy }) => {
-    const [loading, setLoading] = useState(false)
-
+const ChangePasswordModal: React.FC<IChangePasswordModalProps> = ({ dispatch, submitting, userUUID, visible, onDestroy }) => {
     const [form] = Form.useForm()
     useEffect(() => {
         if (form && !visible) form.resetFields()
     }, [visible])
 
-    const handleDestroy = () => onDestroy()
-
     const layout = { labelCol: { span: 8 }, wrapperCol: { span: 12 } }
 
     const handleOk = (values: Store) => {
         const formValues = (values as IFormValues)
-        setLoading(true)
+        formValues.uuid = userUUID
 
-        patchUserAccount({ uuid: userUUID, password: formValues.password, new_password: formValues.new_password }, ['password'])
-            .then(res => {
-                setLoading(false)
-
-                if (res.status === 201) {
-                    message.success('密码已修改，请使用新密码登陆')
-                    handleDestroy()
-                    setTimeout(() => history.push('/user/login'), 2000)
-                } else {
-                    message.warning('重置密码失败')
-                }
-            })
+        dispatch({
+            type: 'current_user/changeMyPassword', payload: formValues, callback: () => {
+                notification.warning({ description: '请使用新密码登陆', message: '密码已修改' })
+                onDestroy()
+                setTimeout(() => history.push('/user/login'), 2000)
+            }
+        })
     }
 
     return (
-        <Modal getContainer={false} title="重置登陆账号的密码" visible={visible} confirmLoading={loading} onCancel={handleDestroy}
+        <Modal getContainer={false} title="重置登陆账号的密码" visible={visible} confirmLoading={submitting} onCancel={onDestroy}
             onOk={() => {
-                form.validateFields()
-                    .then(values => {
-                        form.resetFields()
-                        handleOk(values)
-                    })
+                form.validateFields().then(values => handleOk(values))
             }}
         >
             <Form {...layout} name="basic" form={form}>
@@ -96,4 +87,7 @@ const ChangePasswordModal: React.FC<IChangePasswordModalProps> = ({ userUUID, vi
     )
 }
 
-export default ChangePasswordModal
+
+export default connect(({ loading }: ConnectState) => ({
+    submitting: loading.effects['current_user/changeMyPassword'],
+}))(ChangePasswordModal)

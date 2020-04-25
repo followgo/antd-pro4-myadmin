@@ -12,16 +12,18 @@ import UsersTable from './components/UsersTable'
 interface IManagementUsersProps {
     dispatch: Dispatch
     users: IUserState[]
-    loading: boolean | undefined,
+    loading?: boolean,
+    creating?: boolean,
 }
 
-const ManagementUsers: React.FC<IManagementUsersProps> = ({ dispatch, users, loading = false }) => {
+const ManagementUsers: React.FC<IManagementUsersProps> = ({ dispatch, users, loading = false, creating = false }) => {
     const [visible, setVisible] = useState<boolean>(false)
     const [current, setCurrent] = useState<Partial<IUserState> | undefined>(undefined)
 
     useEffect(() => {
         dispatch({ type: 'users/fetchAllUsers' })
-    }, [1])
+        setTimeout(() => console.log(users), 1000)
+    }, [])
 
     const showAddModal = () => {
         setVisible(true)
@@ -36,8 +38,8 @@ const ManagementUsers: React.FC<IManagementUsersProps> = ({ dispatch, users, loa
     return (
         <PageHeaderWrapper title={false}>
             <Card>
-                <AddButton loading={loading} onClick={showAddModal} />
-                <UsersTable data={users} />
+                <AddButton loading={creating} onClick={showAddModal} />
+                <UsersTable data={users} loading={loading} />
             </Card>
         </PageHeaderWrapper>
     )
@@ -45,5 +47,6 @@ const ManagementUsers: React.FC<IManagementUsersProps> = ({ dispatch, users, loa
 
 export default connect(({ users, loading }: ConnectState) => ({
     users,
-    loading: loading.models.users
+    loading: loading.effects['users/fetchAllUsers'],
+    creating: loading.effects['users/create']
 }))(ManagementUsers)

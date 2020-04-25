@@ -1,17 +1,21 @@
 import { Effect, Reducer } from 'umi'
-import { queryUserAccounts, IUserAccount } from '@/services/user'
+import { queryUserAccounts, IUserAccount, patchUserAccount } from '@/services/user'
+import { IUserState } from './connect'
 
 export interface IManagementUsersModel {
     namespace: 'users'
     state: IUserAccount[]
     effects: {
         fetchAllUsers: Effect
+        changeUser: Effect
         // createUser: Effect
         // updateUser: Effect
         // deleteUser: Effect
     }
     reducers: {
-        add: Reducer<IUserAccount[]>
+        fetchAll: Reducer<IUserAccount[]>
+        update: Reducer<IUserAccount[]>
+        push: Reducer<IUserAccount[]>
         // change: Reducer<IUserAccount>
         // delete: Reducer<IUserAccount>
     }
@@ -24,15 +28,37 @@ const Model: IManagementUsersModel = {
         *fetchAllUsers(_, { call, put }) {
             const res = yield call(queryUserAccounts)
             if (res.status === 200) {
-                yield put({ type: 'add', payload: res.data })
+                yield put({ type: 'fetchAll', payload: res.data })
             }
-        }
+        },
+        *changeUser({ payload: { data, patch_fields } }, { call, put }) {
+            const res = yield call(patchUserAccount, data, patch_fields)
+            if (res.status === 201) {
+                yield put({ type: 'update', payload: res.data })
+            }
+        },
     },
     reducers: {
-        add(state, { payload }): IUserAccount[] {
-            let newState: IUserAccount[] = payload
-            if (state) newState = { ...state }
+        fetchAll(_, { payload }) {
+            return payload
+        },
+        update(state, { payload }) {
+            const newState: IUserAccount[] = []
+            if (state) newState.push(...state)
+            newState.some((value, index) => {
+                if (value.uuid === payload.uuid) {
+                    newState[index] = (payload as IUserState)
+                    return true
+                }
+                return false
+            })
 
+            return newState
+        },
+        push(state, { payload }) {
+            const newState: IUserAccount[] = []
+            if (state) newState.push(...state)
+            newState.push(...payload)
             return newState
         }
     }

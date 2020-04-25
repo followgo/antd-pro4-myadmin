@@ -1,14 +1,14 @@
 import { Effect, Reducer } from 'umi'
 import { setAuthority } from '@/utils/authority'
 import { IUserAccount, queryMySettings, patchUserAccount } from '@/services/user'
-import { message } from 'antd'
 
 export interface ICurrentUserModel {
   namespace: 'current_user'
-  state: IUserAccount
+  state: IUserAccount & { new_password?: string }
   effects: {
     fetchMySettings: Effect
     changeMySettings: Effect
+    changeMyPassword: Effect
   }
   reducers: {
     saveMySettings: Reducer<IUserAccount>
@@ -34,8 +34,12 @@ const Model: ICurrentUserModel = {
       const res = yield call(patchUserAccount, data, patch_fields)
       if (res.status === 201) {
         yield put({ type: 'saveMySettings', payload: res.data })
-        message.success('更新基本信息成功')
       }
+    },
+
+    *changeMyPassword({ payload, callback }, { call }) {
+      const res = yield call(patchUserAccount, payload, ['password'])
+      if (res.status === 201) callback()
     },
   },
 

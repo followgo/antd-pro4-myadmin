@@ -28,19 +28,8 @@ let mockAccounts: IUserAccount[] = [
         nickname: Random.name(),
         email: 'guest@localhost',
         authority: 'guest',
-        enabled: true
+        enabled: false
     },
-    ...mock({
-        "array|2-10": [{
-            uuid: Random.guid(),
-            account_name: Random.word(4, 10),
-            password: '',
-            nickname: Random.name(),
-            email: Random.email(),
-            'authority|1': ['admin', 'user', 'guest'],
-            enabled: Random.boolean(),
-        }]
-    }).array
 ]
 
 let currentUserUUID: string = ''
@@ -122,7 +111,7 @@ export default {
             status: 200,
             message: '成功',
             data: mockAccounts,
-        }), 1000)
+        }), 500)
     },
 
     // 添加
@@ -182,18 +171,19 @@ export default {
                     mockAccounts[index][field] = patchData[field]
                     return false
                 })
-            }
 
-            if (!resp.status) {
-                resp = { status: 201, message: '成功', data: mockAccounts[index] }
+                if (resp.status === 0) {
+                    resp = { status: 201, message: '成功', data: mockAccounts[index] }
+                }
+                return true
             }
-            return true
+            return false
         })
         if (!existing) {
             resp = { status: 404, message: '该用户不存在' }
         }
 
-        res.status(resp.status).send(resp)
+        setTimeout(() => res.status(resp.status).send(resp), 1000)
     },
 
     // 删除

@@ -1,4 +1,4 @@
-import { Button, Input, Form } from 'antd'
+import { Button, Input, Form, message } from 'antd'
 import React from 'react'
 import { connect, Dispatch } from 'umi'
 import { ConnectState, IUserState } from '@/models/connect'
@@ -37,7 +37,10 @@ class BaseView extends React.Component<IBaseViewProps> {
   handleFinish = (values: Store) => {
     const { dispatch } = this.props
     if (dispatch) {
-      dispatch({ type: 'current_user/changeMySettings', payload: { data: values, patch_fields: ['account_name', 'nickname', 'email'] } })
+      dispatch({ 
+        type: 'current_user/changeMySettings', 
+        payload: { data: values, patch_fields: ['account_name', 'nickname', 'email'] }
+      })
     }
   };
 
@@ -48,7 +51,7 @@ class BaseView extends React.Component<IBaseViewProps> {
         <div className={styles.left}>
           <Form layout="vertical" onFinish={this.handleFinish} initialValues={currentUser}>
 
-            <Form.Item name="uuid" label="唯一识别码（只读）">
+            <Form.Item name="uuid" label="ID（只读）">
               <Input readOnly />
             </Form.Item>
 
