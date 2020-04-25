@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { Modal, Form, Input, message, notification, } from 'antd'
+import React, { useEffect } from 'react'
+import { Modal, Form, Input, notification, } from 'antd'
 import { Store } from 'antd/es/form/interface'
-import { patchUserAccount } from '@/services/user'
 import { history, connect, Dispatch } from 'umi'
 import { ConnectState } from '@/models/connect'
 
@@ -16,10 +15,10 @@ interface IChangePasswordModalProps {
     userUUID: string
     visible: boolean
     submitting?: boolean
-    onDestroy: () => void
+    onCancel: () => void
 }
 
-const ChangePasswordModal: React.FC<IChangePasswordModalProps> = ({ dispatch, submitting, userUUID, visible, onDestroy }) => {
+const ChangePasswordModal: React.FC<IChangePasswordModalProps> = ({ dispatch, submitting, userUUID, visible, onCancel }) => {
     const [form] = Form.useForm()
     useEffect(() => {
         if (form && !visible) form.resetFields()
@@ -34,14 +33,14 @@ const ChangePasswordModal: React.FC<IChangePasswordModalProps> = ({ dispatch, su
         dispatch({
             type: 'current_user/changeMyPassword', payload: formValues, callback: () => {
                 notification.warning({ description: '请使用新密码登陆', message: '密码已修改' })
-                onDestroy()
+                onCancel()
                 setTimeout(() => history.push('/user/login'), 2000)
             }
         })
     }
 
     return (
-        <Modal getContainer={false} title="重置登陆账号的密码" visible={visible} confirmLoading={submitting} onCancel={onDestroy}
+        <Modal getContainer={false} title="重置登陆账号的密码" visible={visible} confirmLoading={submitting} onCancel={onCancel}
             onOk={() => {
                 form.validateFields().then(values => handleOk(values))
             }}

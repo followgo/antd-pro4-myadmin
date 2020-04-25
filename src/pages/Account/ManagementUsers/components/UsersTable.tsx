@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { CloseOutlined, CheckOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { Table, Tag, Popconfirm, Button } from 'antd'
 import { connect, Dispatch } from 'umi'
@@ -6,19 +6,28 @@ import { ConnectState, IUserState } from '@/models/connect'
 
 interface IManagementUsersProps {
     dispatch: Dispatch
-    data: IUserState[],
-    loading?: boolean,
-    changing?: boolean,
+    users: IUserState[]
+    onShowEditModal: (data: IUserState) => void
+    loading?: boolean
+    changing?: boolean
+    deleting?: boolean
 }
 
-const UsersTable: React.FC<IManagementUsersProps> = ({ dispatch, data, loading = false, changing = false }) => {
+const UsersTable: React.FC<IManagementUsersProps> = ({ dispatch, users, onShowEditModal, loading = false, changing = false, deleting = false }) => {
+    useEffect(() => {
+        dispatch({ type: 'users/fetchAllUsers' })
+    }, [])
 
     const handleToggleEnable = (item: IUserState) => {
         dispatch({ type: 'users/changeUser', payload: { data: { ...item, enabled: !item.enabled }, patch_fields: ['enabled'] } })
     }
 
+    const handleDelete = (item: IUserState) => {
+        dispatch({ type: 'users/deleteUser', payload: { uuid: item.uuid } })
+    }
+
     const columns = [
-        { title: 'ID', dataIndex: 'uuid', key: 'uuid' },
+        // { title: 'ID', dataIndex: 'uuid', key: 'uuid' },
         { title: '登陆账号', dataIndex: 'account_name', key: 'account_name' },
         { title: '邮箱', dataIndex: 'email', key: 'email' },
         { title: '绰号', dataIndex: 'nickname', key: 'nickname' },
@@ -49,9 +58,9 @@ const UsersTable: React.FC<IManagementUsersProps> = ({ dispatch, data, loading =
             title: '行动', key: 'action', render: (_: any, record: IUserState) => {
                 return (
                     <>
-                        <Button size="small" icon={<EditOutlined />} style={{ marginRight: 10 }} />
-                        <Popconfirm onConfirm={() => handleToggleEnable(record)} title='删除此用户？'>
-                            <Button size="small" danger icon={<DeleteOutlined />} />
+                        <Button onClick={() => onShowEditModal(record)} size="small" icon={<EditOutlined />} style={{ marginRight: 10 }} />
+                        <Popconfirm onConfirm={() => handleDelete(record)} title='删除此用户？'>
+                            <Button loading={deleting} size="small" danger icon={<DeleteOutlined />} />
                         </Popconfirm>
                     </>
                 )
@@ -60,13 +69,19 @@ const UsersTable: React.FC<IManagementUsersProps> = ({ dispatch, data, loading =
     ]
 
     return <Table
+        pagination={false}
         loading={loading}
         columns={columns}
-        dataSource={data}
-        rowKey={(record => record.uuid)}
+        dataSource={users}
+        rowKey={record => record.uuid}
     />
 }
 
-export default connect(({ loading }: ConnectState) => ({
-    changing: loading.effects['users/changeUser']
+export default connect(({ users, loading }: ConnectState) => ({
+    users,
+    loading: loading.effects['users/fetchAllUsers'],
+    changing: loading.effects['users/changeUser'],
+    deleting: loading.effects['users/deleteUser'],
 }))(UsersTable)
+
+

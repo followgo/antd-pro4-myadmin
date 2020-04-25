@@ -73,7 +73,7 @@ class SecurityView extends Component<ISecurityViewProps> {
         />
 
         {/* Modals */}
-        <ChangePasswordModal userUUID={currentUser.uuid} visible={this.state.changePasswordModalVisible} onDestroy={() => this.handleToggleChangePasswordModalVisible(false)} />
+        <ChangePasswordModal userUUID={currentUser.uuid} visible={this.state.changePasswordModalVisible} onCancel={() => this.handleToggleChangePasswordModalVisible(false)} />
       </>
     )
   }

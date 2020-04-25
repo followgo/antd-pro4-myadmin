@@ -116,15 +116,15 @@ export default {
 
     // 添加
     'POST /user/accounts': (req: Request, res: Response) => {
-        const data: IUserAccount = req.body
+        const { data } = req.body
         data.uuid = Random.guid()
         res.status(201).send({ status: 201, message: '成功', data })
     },
 
     // 替换
     'PUT /user/accounts/:uuid': (req: Request, res: Response) => {
-        const uuid: string = req.param('uuid')
-        const data: IUserAccount = req.body
+        const { uuid } = req.params
+        const { data } = req.body
         data.uuid = uuid
 
         const existing = mockAccounts.some((value, index) => {
@@ -188,9 +188,9 @@ export default {
 
     // 删除
     'DELETE /user/accounts/:uuid': (req: Request, res: Response) => {
-        const uuid: string = req.param('uuid')
+        const { uuid } = req.params
 
         mockAccounts = mockAccounts.filter(value => value.uuid !== uuid)
-        res.status(204).send({ status: 204, message: '成功' })
+        res.status(204).send()
     },
 }

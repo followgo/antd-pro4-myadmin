@@ -1,5 +1,5 @@
 import { Effect, Reducer } from 'umi'
-import { queryUserAccounts, IUserAccount, patchUserAccount } from '@/services/user'
+import { queryUserAccounts, IUserAccount, patchUserAccount, deleteUserAccount } from '@/services/user'
 import { IUserState } from './connect'
 
 export interface IManagementUsersModel {
@@ -10,14 +10,14 @@ export interface IManagementUsersModel {
         changeUser: Effect
         // createUser: Effect
         // updateUser: Effect
-        // deleteUser: Effect
+        deleteUser: Effect
     }
     reducers: {
         fetchAll: Reducer<IUserAccount[]>
         update: Reducer<IUserAccount[]>
         push: Reducer<IUserAccount[]>
         // change: Reducer<IUserAccount>
-        // delete: Reducer<IUserAccount>
+        delete: Reducer<IUserAccount[]>
     }
 }
 
@@ -37,6 +37,12 @@ const Model: IManagementUsersModel = {
                 yield put({ type: 'update', payload: res.data })
             }
         },
+        *deleteUser({ payload: { uuid } }, { call, put }) {
+            const res = yield call(deleteUserAccount, uuid)
+            if (!res) { // 204 返回，res 为空
+                yield put({ type: 'delete', payload: { uuid } })
+            }
+        },
     },
     reducers: {
         fetchAll(_, { payload }) {
@@ -52,8 +58,12 @@ const Model: IManagementUsersModel = {
                 }
                 return false
             })
-
             return newState
+        },
+        delete(state, { payload: { uuid } }) {
+            let newState: IUserAccount[] = []
+            if (state) newState = [...state]
+            return newState.filter(value => value.uuid !== uuid)
         },
         push(state, { payload }) {
             const newState: IUserAccount[] = []

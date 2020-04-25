@@ -1,95 +1,101 @@
-import React, { FC, useEffect } from 'react'
-import { Modal, Result, Button, Form, DatePicker, Input, Select } from 'antd'
+import React, { FC, useEffect, useState } from 'react'
+import { Modal, Form, Input, Select, Switch, Radio } from 'antd'
 import { IUserAccount } from '@/services/user'
-import styles from '../style.less'
+import { Dispatch, connect } from 'umi'
+import { ConnectState } from '@/models/connect'
+import { Store } from 'antd/es/form/interface'
 
 interface OperationModalProps {
-    done: boolean
+    dispatch: Dispatch
     visible: boolean
     current: Partial<IUserAccount> | undefined
-    onDone: () => void
-    onSubmit: (values: IUserAccount) => void
     onCancel: () => void
+    submiting?: boolean
 }
 
-const formLayout = { labelCol: { span: 7 }, wrapperCol: { span: 13 } }
+const formLayout = { labelCol: { span: 8 }, wrapperCol: { span: 12 } }
 
-const OpModal: FC<OperationModalProps> = ({ done, visible, current, onDone, onCancel, onSubmit }) => {
+const OpModal: FC<OperationModalProps> = ({ visible, current, submiting, onCancel, dispatch }) => {
+    const [resetPassword, setResetPassword] = useState(false)
     const [form] = Form.useForm()
     useEffect(() => {
         if (form && !visible) form.resetFields()
     }, [visible])
 
     useEffect(() => {
-        if (current) form.setFieldsValue({ ...current })
+        if (current) {
+            form.setFieldsValue({ ...current, password: '87654321' })
+        } else {
+            form.setFieldsValue({ enabled: true, password: '12345678' })
+        }
     }, [current])
 
     const handleSubmit = () => {
-        if (!form) return;
-        form.submit();
+        if (!form) return
+        form.submit()
     }
 
-    const handleFinish = (values: { [key: string]: any }) => {
-        if (onSubmit) {
-            onSubmit(values as IUserAccount)
-        }
+    const handleFinish = (values: Store) => {
+        console.log(values, current)
     };
 
     const getModalContent = () => {
         return (
             <Form {...formLayout} form={form} onFinish={handleFinish}>
-                <Form.Item
-                    name="title"
-                    label="任务名称"
-                    rules={[{ required: true, message: '请输入任务名称' }]}
-                >
-                    <Input placeholder="请输入" />
+                <Form.Item name="account_name" label="登陆账号"
+                    rules={[
+                        { required: true, message: '请输入登陆账号' },
+                        { type: 'string', min: 4, message: '登陆账号太短了' },
+                    ]}>
+                    <Input />
                 </Form.Item>
-                <Form.Item
-                    name="createdAt"
-                    label="开始时间"
-                    rules={[{ required: true, message: '请选择开始时间' }]}
+                {
+                    current &&
+                    <Form.Item label="重置密码">
+                        <Switch checked={resetPassword} onChange={()=>{setResetPassword(!resetPassword)}} />
+                    </Form.Item>
+                }
+                {
+                    (!current || resetPassword) &&
+                    <Form.Item name="password" label="随机密码(只读)">
+                        <Input readOnly />
+                    </Form.Item>
+                }
+                <Form.Item name="authority" label="权限"
+                    rules={[
+                        { required: true, message: '请选择权限' },
+                    ]}
                 >
-                    <DatePicker
-                        showTime
-                        placeholder="请选择"
-                        format="YYYY-MM-DD HH:mm:ss"
-                        style={{ width: '100%' }}
-                    />
+                    <Radio.Group >
+                        <Radio.Button value="guest">GUEST</Radio.Button>
+                        <Radio.Button value="user">USER</Radio.Button>
+                        <Radio.Button value="admin">ADMIN</Radio.Button>
+                    </Radio.Group>
                 </Form.Item>
-                <Form.Item
-                    name="owner"
-                    label="任务负责人"
-                    rules={[{ required: true, message: '请选择任务负责人' }]}
-                >
-                    <Select placeholder="请选择">
-                        <Select.Option value="付晓晓">付晓晓</Select.Option>
-                        <Select.Option value="周毛毛">周毛毛</Select.Option>
-                    </Select>
+                <Form.Item name="enabled" label="使能" valuePropName="checked">
+                    <Switch />
                 </Form.Item>
-                <Form.Item
-                    name="subDescription"
-                    label="产品描述"
-                    rules={[{ message: '请输入至少五个字符的产品描述！', min: 5 }]}
-                >
-                    <TextArea rows={4} placeholder="请输入至少五个字符" />
+                <Form.Item name="nickname" label="绰号">
+                    <Input />
                 </Form.Item>
             </Form>
         )
     }
 
     return (
-        <Modal getContainer={false}
-            title={`任务${current ? '编辑' : '添加'}`}
-            className={styles.standardListForm}
-            width={640}
-            bodyStyle={done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
-            destroyOnClose
+        <Modal
+            getContainer={false}
+            title={`${current ? '编辑' : '添加'}用户`}
             visible={visible}
+            confirmLoading={submiting}
+            onCancel={onCancel}
+            onOk={handleSubmit}
         >
             {getModalContent()}
         </Modal>
-    );
-};
+    )
+}
 
-export default OpModal
+export default connect(({ loading }: ConnectState) => ({
+    submiting: loading.effects['users/create'] || loading.effects['users/update']
+}))(OpModal)

@@ -93,6 +93,7 @@ request.interceptors.request.use(async (url, options) => {
   return ({ url, options: { ...options, headers } })
 })
 
+// 响应拦截，统一提示成功
 request.interceptors.response.use((res) => {
   if (res.status === 201) {
     // 登陆和登出不提示
@@ -103,6 +104,7 @@ request.interceptors.response.use((res) => {
   } else if (res.status === 202 || res.status === 204) {
     message.success(codeMessage[res.status])
   }
+
   return res
 })
 
