@@ -55,7 +55,7 @@ const ChangePasswordModal: React.FC<IChangePasswordModalProps> = ({ dispatch, su
                     <Input.Password />
                 </Form.Item>
 
-                <Form.Item label="新密码" name="new_password" hasFeedback
+                <Form.Item label="新密码" name="new_password"
                     rules={[
                         { required: true, message: '请输入新密码' },
                         { type: 'string', min: 6, message: '密码太短了' },
@@ -64,7 +64,7 @@ const ChangePasswordModal: React.FC<IChangePasswordModalProps> = ({ dispatch, su
                     <Input.Password />
                 </Form.Item>
 
-                <Form.Item label="确认新密码" name="confirm_new_password" dependencies={['new_password']} hasFeedback
+                <Form.Item label="确认新密码" name="confirm_new_password" dependencies={['new_password']}
                     rules={[
                         { required: true, message: '请再次输入新密码' },
                         ({ getFieldValue }) => ({

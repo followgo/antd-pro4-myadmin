@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { mock, Random } from 'mockjs'
+import { Random } from 'mockjs'
 import { IUserAccount } from '@/services/user'
 
 let mockAccounts: IUserAccount[] = [
@@ -116,8 +116,9 @@ export default {
 
     // 添加
     'POST /user/accounts': (req: Request, res: Response) => {
-        const { data } = req.body
+        const data = req.body
         data.uuid = Random.guid()
+        mockAccounts.push(data)
         res.status(201).send({ status: 201, message: '成功', data })
     },
 

@@ -1,5 +1,5 @@
 import { Effect, Reducer } from 'umi'
-import { queryUserAccounts, IUserAccount, patchUserAccount, deleteUserAccount } from '@/services/user'
+import { queryUserAccounts, IUserAccount, patchUserAccount, deleteUserAccount, createUserAccount } from '@/services/user'
 import { IUserState } from './connect'
 
 export interface IManagementUsersModel {
@@ -8,15 +8,13 @@ export interface IManagementUsersModel {
     effects: {
         fetchAllUsers: Effect
         changeUser: Effect
-        // createUser: Effect
-        // updateUser: Effect
+        createUser: Effect
         deleteUser: Effect
     }
     reducers: {
         fetchAll: Reducer<IUserAccount[]>
         update: Reducer<IUserAccount[]>
-        push: Reducer<IUserAccount[]>
-        // change: Reducer<IUserAccount>
+        add: Reducer<IUserAccount[]>
         delete: Reducer<IUserAccount[]>
     }
 }
@@ -31,11 +29,12 @@ const Model: IManagementUsersModel = {
                 yield put({ type: 'fetchAll', payload: res.data })
             }
         },
-        *changeUser({ payload: { data, patch_fields } }, { call, put }) {
+        *changeUser({ payload: { data, patch_fields }, callback }, { call, put }) {
             const res = yield call(patchUserAccount, data, patch_fields)
             if (res.status === 201) {
                 yield put({ type: 'update', payload: res.data })
             }
+            if (callback) callback()
         },
         *deleteUser({ payload: { uuid } }, { call, put }) {
             const res = yield call(deleteUserAccount, uuid)
@@ -43,6 +42,13 @@ const Model: IManagementUsersModel = {
                 yield put({ type: 'delete', payload: { uuid } })
             }
         },
+        *createUser({ payload, callback }, { call, put }) {
+            const res = yield call(createUserAccount, payload)
+            if (res.status === 201) {
+                yield put({ type: 'add', payload: res.data })
+            }
+            if (callback) callback()
+        }
     },
     reducers: {
         fetchAll(_, { payload }) {
@@ -65,10 +71,10 @@ const Model: IManagementUsersModel = {
             if (state) newState = [...state]
             return newState.filter(value => value.uuid !== uuid)
         },
-        push(state, { payload }) {
+        add(state, { payload }) {
             const newState: IUserAccount[] = []
             if (state) newState.push(...state)
-            newState.push(...payload)
+            newState.push(payload)
             return newState
         }
     }

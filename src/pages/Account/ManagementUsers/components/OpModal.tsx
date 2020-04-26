@@ -1,9 +1,10 @@
 import React, { FC, useEffect, useState } from 'react'
-import { Modal, Form, Input, Select, Switch, Radio } from 'antd'
+import { Modal, Form, Input, Switch, Radio } from 'antd'
 import { IUserAccount } from '@/services/user'
 import { Dispatch, connect } from 'umi'
 import { ConnectState } from '@/models/connect'
 import { Store } from 'antd/es/form/interface'
+import { randAlphaNum } from '@/utils/other'
 
 interface OperationModalProps {
     dispatch: Dispatch
@@ -18,17 +19,20 @@ const formLayout = { labelCol: { span: 8 }, wrapperCol: { span: 12 } }
 const OpModal: FC<OperationModalProps> = ({ visible, current, submiting, onCancel, dispatch }) => {
     const [resetPassword, setResetPassword] = useState(false)
     const [form] = Form.useForm()
-    useEffect(() => {
-        if (form && !visible) form.resetFields()
-    }, [visible])
 
     useEffect(() => {
-        if (current) {
-            form.setFieldsValue({ ...current, password: '87654321' })
-        } else {
-            form.setFieldsValue({ enabled: true, password: '12345678' })
+        if (form && !visible) {
+            form.resetFields()
+            setResetPassword(false)
+            return
         }
-    }, [current])
+
+        if (form && visible && current) {
+            form.setFieldsValue({ ...current, password: randAlphaNum(8) })
+        } else {
+            form.setFieldsValue({ enabled: true, password: randAlphaNum(8) })
+        }
+    }, [current, visible])
 
     const handleSubmit = () => {
         if (!form) return
@@ -36,8 +40,22 @@ const OpModal: FC<OperationModalProps> = ({ visible, current, submiting, onCance
     }
 
     const handleFinish = (values: Store) => {
-        console.log(values, current)
-    };
+        if (current) {
+            const patch_fields = ['enabled', 'nickname', 'account_name', 'authority']
+            if (resetPassword) patch_fields.push('password')
+            dispatch({
+                type: 'users/changeUser', payload: { data: { ...values, uuid: current.uuid }, patch_fields }, callback: () => {
+                    onCancel()
+                }
+            })
+        } else {
+            dispatch({
+                type: 'users/createUser', payload: { ...values, uuid: '' }, callback: () => {
+                    onCancel()
+                }
+            })
+        }
+    }
 
     const getModalContent = () => {
         return (
@@ -46,13 +64,15 @@ const OpModal: FC<OperationModalProps> = ({ visible, current, submiting, onCance
                     rules={[
                         { required: true, message: '请输入登陆账号' },
                         { type: 'string', min: 4, message: '登陆账号太短了' },
+                        { pattern: /^[A-Za-z]/, message: '必须以英文字母开头' },
+                        { pattern: /^[A-Za-z0-9_]*$/g, message: '只能包含英文字母、数字和下划线' },
                     ]}>
                     <Input />
                 </Form.Item>
                 {
                     current &&
                     <Form.Item label="重置密码">
-                        <Switch checked={resetPassword} onChange={()=>{setResetPassword(!resetPassword)}} />
+                        <Switch checked={resetPassword} onChange={() => { setResetPassword(!resetPassword) }} />
                     </Form.Item>
                 }
                 {
@@ -97,5 +117,5 @@ const OpModal: FC<OperationModalProps> = ({ visible, current, submiting, onCance
 }
 
 export default connect(({ loading }: ConnectState) => ({
-    submiting: loading.effects['users/create'] || loading.effects['users/update']
+    submiting: loading.effects['users/createUser'] || loading.effects['users/changeUser']
 }))(OpModal)
