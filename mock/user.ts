@@ -125,7 +125,7 @@ export default {
     // 替换
     'PUT /user/accounts/:uuid': (req: Request, res: Response) => {
         const { uuid } = req.params
-        const { data } = req.body
+        const data = req.body
         data.uuid = uuid
 
         const existing = mockAccounts.some((value, index) => {
