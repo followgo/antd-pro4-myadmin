@@ -20,4 +20,8 @@ export default {
   'menu.account.settings': '个人设置',
   'menu.account.management_users': '管理用户',
   'menu.account.logout': '退出登录',
+
+  'menu.website': '网站设置',
+  'menu.website.base': '基本设置',
+  'menu.website.banners': '横幅',
 }

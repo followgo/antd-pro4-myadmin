@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { Dispatch, connect } from 'umi';
 import { PageHeaderWrapper, GridContent } from '@ant-design/pro-layout'
-import { Menu } from 'antd';
+import { Menu } from 'antd'
 import { ConnectState, IUserState } from '@/models/connect'
 import BaseView from './components/BaseView';
 import SecurityView from './components/SecurityView';
 import styles from './style.less';
-
-const { Item } = Menu
 
 interface IMySettingsProps {
   dispatch: Dispatch;
@@ -53,7 +51,7 @@ class Settings extends Component<IMySettingsProps, IMySettingsState> {
 
   getMenu = () => {
     const { menuMap } = this.state;
-    return Object.keys(menuMap).map(item => <Item key={item}>{menuMap[item]}</Item>);
+    return Object.keys(menuMap).map(item => <Menu.Item key={item}>{menuMap[item]}</Menu.Item>)
   };
 
   getRightTitle = () => {

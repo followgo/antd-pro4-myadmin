@@ -66,12 +66,12 @@ export default defineConfig({
                 {
                   name: 'settings',
                   icon: 'ProfileOutlined',
-                  path: '/account/settings',
-                  component: './Account/Settings',
+                  path: '/account/my_settings',
+                  component: './Account/MySettings',
                 },
                 {
                   name: 'management_users',
-                  icon: 'ProfileOutlined',
+                  icon: 'TeamOutlined',
                   path: '/account/management_users',
                   component: './Account/ManagementUsers',
                 },
@@ -79,8 +79,28 @@ export default defineConfig({
                   component: './Exception/404',
                 },
               ],
-            }, // 错误页面
+            }, 
             {
+              name: 'website',
+              icon: 'WindowsOutlined',
+              path: '/website',
+              routes: [
+                {
+                  name: 'base',
+                  icon: 'SettingOutlined',
+                  path: '/website/base_settings',
+                  component: './Website/BaseSettings',
+                },
+                {
+                  name: 'banners',
+                  icon: 'PictureOutlined',
+                  path: '/website/banners',
+                  component: './Website/BaseSettings',
+                },
+              ]
+            },
+            {
+              // 错误页面
               hideInMenu: true,
               // 路由不显示在菜单中
               name: 'exception',
