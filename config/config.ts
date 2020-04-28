@@ -79,7 +79,7 @@ export default defineConfig({
                   component: './Exception/404',
                 },
               ],
-            }, 
+            },
             {
               name: 'website',
               icon: 'WindowsOutlined',
@@ -92,12 +92,18 @@ export default defineConfig({
                   component: './Website/BaseSettings',
                 },
                 {
+                  name: 'index_seo_settings',
+                  icon: 'HomeOutlined',
+                  path: '/website/index_seo_settings',
+                  component: './Website/IndexSEO',
+                },
+                {
                   name: 'banners',
                   icon: 'PictureOutlined',
                   path: '/website/banners',
-                  component: './Website/BaseSettings',
+                  component: './Website/Banners',
                 },
-              ]
+              ],
             },
             {
               // 错误页面

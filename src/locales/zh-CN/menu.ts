@@ -23,5 +23,6 @@ export default {
 
   'menu.website': '网站设置',
   'menu.website.base': '基本设置',
+  'menu.website.index_seo_settings': '首页SEO',
   'menu.website.banners': '横幅',
 }
