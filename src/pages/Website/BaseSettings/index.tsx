@@ -1,16 +1,19 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Input, Form, Tooltip } from 'antd';
 import { connect, Dispatch } from 'umi';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { PageHeaderWrapper } from '@ant-design/pro-layout'
 import { Store } from 'antd/es/form/interface'
+import { ConnectState } from '@/models/connect';
+import { IWebsiteBaseSettings } from '@/services/website-settings';
 
 interface IBaseSettingsProps {
-  submitting: boolean
+  loading?: boolean
+  baseSettings: IWebsiteBaseSettings
   dispatch: Dispatch
 }
 
-const BaseSettings: React.FC<IBaseSettingsProps> = ({ submitting, dispatch }) => {
+const BaseSettings: React.FC<IBaseSettingsProps> = ({ loading, baseSettings, dispatch }) => {
   const [form] = Form.useForm()
   const formItemLayout = {
     labelCol: { xs: { span: 24 }, sm: { span: 7 } },
@@ -20,16 +23,19 @@ const BaseSettings: React.FC<IBaseSettingsProps> = ({ submitting, dispatch }) =>
     wrapperCol: { xs: { span: 24, offset: 0 }, sm: { span: 10, offset: 7 } }
   }
 
+  useEffect(() => {
+    dispatch({ type: 'website_base/fetch' })
+  }, [])
+
+  useEffect(() => form.setFieldsValue(baseSettings), [baseSettings])
+
   const onFinish = (values: Store) => {
-    dispatch({
-      type: 'formBasicForm/submitRegularForm',
-      payload: values,
-    })
+    dispatch({ type: 'website_base/update', payload: values })
   }
 
   return (
     <PageHeaderWrapper title={false}>
-      <Form style={{ marginTop: 8 }} form={form} name="basic" initialValues={{ public: '1' }} onFinish={onFinish}      >
+      <Form style={{ marginTop: 8 }} form={form} name="basic" onFinish={onFinish}>
 
         <Form.Item {...formItemLayout} name="global_title_suffix" label={
           <span>全局标题后缀&nbsp;
@@ -75,7 +81,7 @@ const BaseSettings: React.FC<IBaseSettingsProps> = ({ submitting, dispatch }) =>
         </Form.Item>
 
         <Form.Item {...submitFormLayout} style={{ marginTop: 32 }}>
-          <Button type="primary" htmlType="submit" loading={submitting}>
+          <Button type="primary" htmlType="submit" loading={loading}>
             更新
           </Button>
         </Form.Item>
@@ -84,4 +90,7 @@ const BaseSettings: React.FC<IBaseSettingsProps> = ({ submitting, dispatch }) =>
   )
 }
 
-export default BaseSettings
+export default connect(({ website_base, loading }: ConnectState) => ({
+  baseSettings: website_base,
+  loading: loading.effects['website_base/fetch'] || loading.effects['website_base/update'],
+}))(BaseSettings)

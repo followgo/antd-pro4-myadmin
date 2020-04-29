@@ -36,7 +36,7 @@ let currentUserUUID: string = ''
 
 export default {
     // 用户登入
-    'POST /user/login/account': (req: Request, res: Response) => {
+    'POST /api/user/login/account': (req: Request, res: Response) => {
         const { password, name_or_email } = req.body
 
         const existing = mockAccounts.some(value => {
@@ -69,7 +69,7 @@ export default {
     },
 
     // 刷新token
-    'GET /user/refresh_token': (_req: Request, res: Response) => {
+    'GET /api/user/refresh_token': (_req: Request, res: Response) => {
         res.status(200).send({
             status: 200,
             message: '成功',
@@ -82,12 +82,12 @@ export default {
     },
 
     // 用户登出
-    'POST /user/logout': (req: Request, res: Response) => {
+    'POST /api/user/logout': (req: Request, res: Response) => {
         res.status(201).send({ status: 201, message: '成功' })
     },
 
     // 返回用户账号信息
-    'GET /user/accounts/mysettings': (req: Request, res: Response) => {
+    'GET /api/user/accounts/mysettings': (req: Request, res: Response) => {
         const existing = mockAccounts.some(value => {
             if (value.uuid === currentUserUUID) {
                 setTimeout(() => res.status(200).send({
@@ -106,7 +106,7 @@ export default {
     },
 
     // 返回所有用户账号信息
-    'GET /user/accounts': (req: Request, res: Response) => {
+    'GET /api/user/accounts': (req: Request, res: Response) => {
         setTimeout(() => res.status(200).send({
             status: 200,
             message: '成功',
@@ -115,7 +115,7 @@ export default {
     },
 
     // 添加
-    'POST /user/accounts': (req: Request, res: Response) => {
+    'POST /api/user/accounts': (req: Request, res: Response) => {
         const data = req.body
         data.uuid = Random.guid()
         mockAccounts.push(data)
@@ -123,7 +123,7 @@ export default {
     },
 
     // 替换
-    'PUT /user/accounts/:uuid': (req: Request, res: Response) => {
+    'PUT /api/user/accounts/:uuid': (req: Request, res: Response) => {
         const { uuid } = req.params
         const data = req.body
         data.uuid = uuid
@@ -147,7 +147,7 @@ export default {
     },
 
     // 修补
-    'PATCH /user/accounts/:uuid': (req: Request, res: Response) => {
+    'PATCH /api/user/accounts/:uuid': (req: Request, res: Response) => {
         const { uuid } = req.params
         const { data, patch_fields } = req.body
 
@@ -188,7 +188,7 @@ export default {
     },
 
     // 删除
-    'DELETE /user/accounts/:uuid': (req: Request, res: Response) => {
+    'DELETE /api/user/accounts/:uuid': (req: Request, res: Response) => {
         const { uuid } = req.params
 
         mockAccounts = mockAccounts.filter(value => value.uuid !== uuid)

@@ -1,11 +1,11 @@
 import React, { FC, useEffect, useState } from 'react'
-import { Modal, Form, Input, Switch, Radio, Upload, Button, Select } from 'antd'
+import { Modal, Form, Input, Switch, Upload, Button, Select } from 'antd'
 import { IUserAccount } from '@/services/user'
 import { Dispatch, connect } from 'umi'
 import { ConnectState } from '@/models/connect'
 import { Store } from 'antd/es/form/interface'
 import { randAlphaNum } from '@/utils/other'
-import { InboxOutlined, UploadOutlined } from '@ant-design/icons'
+import { UploadOutlined } from '@ant-design/icons'
 
 interface OperationModalProps {
     dispatch: Dispatch

@@ -1,6 +1,5 @@
 import { Effect, Reducer } from 'umi'
 import { queryUserAccounts, IUserAccount, patchUserAccount, deleteUserAccount, createUserAccount } from '@/services/user'
-import { IUserState } from './connect'
 
 export interface IManagementUsersModel {
     namespace: 'users'
@@ -59,7 +58,7 @@ const Model: IManagementUsersModel = {
             if (state) newState.push(...state)
             newState.some((value, index) => {
                 if (value.uuid === payload.uuid) {
-                    newState[index] = (payload as IUserState)
+                    newState[index] = (payload as IUserAccount)
                     return true
                 }
                 return false

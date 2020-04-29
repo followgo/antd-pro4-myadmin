@@ -83,5 +83,3 @@ export default connect(({ users, loading }: ConnectState) => ({
     changing: loading.effects['users/changeUser'],
     deleting: loading.effects['users/deleteUser'],
 }))(UsersTable)
-
-
