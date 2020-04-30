@@ -31,7 +31,9 @@ const Model: IWebsiteBaseSettingsModel = {
         }
     },
     reducers: {
-        change(_, { payload }) { return payload },
+        change(_, { payload }) {
+            return payload
+        },
     },
 }
 

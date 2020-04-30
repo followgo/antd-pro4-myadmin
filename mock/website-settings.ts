@@ -22,7 +22,7 @@ export default {
     'PUT /api/website/base_settings': (req: Request, res: Response) => {
         websiteBaseSettings = req.body
         setTimeout(() => res.status(201).send({
-            status: 201, message: '成功', websiteBaseSettings,
+            status: 201, message: '成功', data: websiteBaseSettings,
         }), 1000)
     },
     'GET /api/website/index_seo': (_req: Request, res: Response) => {
@@ -33,7 +33,7 @@ export default {
     'PUT /api/website/index_seo': (req: Request, res: Response) => {
         indexSEO = req.body
         setTimeout(() => res.status(201).send({
-            status: 201, message: '成功', indexSEO,
+            status: 201, message: '成功', data: indexSEO,
         }), 1000)
     },
 }
