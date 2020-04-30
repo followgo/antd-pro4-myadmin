@@ -37,8 +37,8 @@ class BaseView extends React.Component<IBaseViewProps> {
   handleFinish = (values: Store) => {
     const { dispatch } = this.props
     if (dispatch) {
-      dispatch({ 
-        type: 'current_user/changeMySettings', 
+      dispatch({
+        type: 'current_user/changeMySettings',
         payload: { data: values, patch_fields: ['account_name', 'nickname', 'email'] }
       })
     }
@@ -75,11 +75,8 @@ class BaseView extends React.Component<IBaseViewProps> {
             </Form.Item>
 
             <Form.Item>
-              <Button htmlType="submit" type="primary" size="large" loading={submitting}>
-                更新个人信息
-              </Button>
+              <Button htmlType="submit" type="primary" loading={submitting}>更新</Button>
             </Form.Item>
-
           </Form>
         </div>
         {/* <div className={styles.right}>

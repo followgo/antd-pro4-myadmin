@@ -1,41 +1,48 @@
-import React, { useState, useEffect } from 'react'
-import { Card } from 'antd'
+import React, { useState } from 'react'
+import { Card, Menu } from 'antd'
 import { PageHeaderWrapper } from '@ant-design/pro-layout'
-import { Dispatch } from 'umi'
 import { IUserState } from '@/models/connect'
 import AddButton from './components/AddButton'
 import UsersTable from './components/UsersTable'
 import OpModal from './components/OpModal'
 
-
-interface IManagementUsersProps {
-
-}
-
-const ManagementUsers: React.FC<IManagementUsersProps> = () => {
+const Banners: React.FC = () => {
     const [visible, setVisible] = useState<boolean>(false)
     const [current, setCurrent] = useState<Partial<IUserState> | undefined>(undefined)
 
     const showAddModal = () => {
-        console.log(visible)
-        setVisible(true)
         setCurrent(undefined)
-    };
+        setVisible(true)
+    }
 
     const showEditModal = (item: IUserState) => {
-        setVisible(true)
         setCurrent(item)
+        setVisible(true)
+    }
+
+    const menuMap = [{ key: 'index', name: '首页横幅' }, { key: 'other', name: '其它横幅' },]
+    const [currentMenukey, setcurrentMenukey] = useState<string>('index')
+    const renderChildren = () => {
+        switch (currentMenukey) {
+            case 'index': return <UsersTable onShowEditModal={showEditModal} />
+            default: return <UsersTable onShowEditModal={showEditModal} />
+        }
     }
 
     return (
         <PageHeaderWrapper title={false}>
             <Card>
                 <AddButton onClick={showAddModal} />
-                <UsersTable onShowEditModal={showEditModal} />
+                <OpModal visible={visible} current={current} onCancel={() => setVisible(false)} purposesMap={menuMap} />
+
+                <Menu mode="horizontal" selectedKeys={[currentMenukey]} onClick={({ key }) => setcurrentMenukey(key)}>
+                    {menuMap.map(item => <Menu.Item key={item.key}>{item.name}</Menu.Item>)}
+                </Menu>
+
+                {renderChildren()}
             </Card>
-            <OpModal visible={visible} current={current} onCancel={() => setVisible(false)} />
         </PageHeaderWrapper>
     )
 }
 
-export default ManagementUsers
+export default Banners

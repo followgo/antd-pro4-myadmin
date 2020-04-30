@@ -120,18 +120,9 @@ class Settings extends Component<IMySettingsProps, IMySettingsState> {
     return (
       <PageHeaderWrapper title={false}>
         <GridContent>
-          <div
-            className={styles.main}
-            ref={ref => {
-              if (ref) {
-                this.main = ref;
-              }
-            }}
-          >
+          <div className={styles.main} ref={ref => { if (ref) this.main = ref }}>
             <div className={styles.leftMenu}>
-              <Menu
-                mode={mode}
-                selectedKeys={[selectKey]}
+              <Menu mode={mode} selectedKeys={[selectKey]}
                 onClick={({ key }) => this.selectKey(key as SettingsStateKeys)}
               >
                 {this.getMenu()}

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
-import { Modal, Form, Input, Switch, Upload, Button, Select } from 'antd'
+import { Modal, Form, Input, Upload, Button, Select } from 'antd'
 import { IUserAccount } from '@/services/user'
 import { Dispatch, connect } from 'umi'
 import { ConnectState } from '@/models/connect'
@@ -11,13 +11,14 @@ interface OperationModalProps {
     dispatch: Dispatch
     visible: boolean
     current: Partial<IUserAccount> | undefined
+    purposesMap: Array<{ key: string, name: string }>
     onCancel: () => void
     submiting?: boolean
 }
 
 const formLayout = { labelCol: { span: 6 }, wrapperCol: { span: 14 } }
 
-const OpModal: FC<OperationModalProps> = ({ visible, current, submiting, onCancel, dispatch }) => {
+const OpModal: FC<OperationModalProps> = ({ visible, current, submiting, purposesMap, onCancel, dispatch }) => {
     const [resetPassword, setResetPassword] = useState(false)
     const [form] = Form.useForm()
 
@@ -77,20 +78,12 @@ const OpModal: FC<OperationModalProps> = ({ visible, current, submiting, onCance
                 <Form.Item name="intro" label="介绍">
                     <Input.TextArea />
                 </Form.Item>
-                <Form.Item name="purpose" label="用途"
-                    rules={[
-                        { required: true, message: '请选择权限' },
-                    ]}
-                >
-                    <Select defaultValue="jack">
-                        <Select.Option value="jack1">Jack1</Select.Option>
+                <Form.Item name="purpose" label="用途" rules={[
+                    { required: true, message: '请选择权限' },
+                ]}>
+                    <Select defaultValue={purposesMap[0].key}>
+                        {purposesMap.map(item => <Select.Option value={item.key}>{item.name}</Select.Option>)}
                     </Select>
-                </Form.Item>
-                <Form.Item name="enabled" label="使能" valuePropName="checked">
-                    <Switch />
-                </Form.Item>
-                <Form.Item name="nickname" label="绰号">
-                    <Input />
                 </Form.Item>
             </Form>
         )
