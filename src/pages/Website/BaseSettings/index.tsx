@@ -38,11 +38,16 @@ const BaseSettings: React.FC<IBaseSettingsProps> = ({ loading, baseSettings, dis
       <Card>
         <Form style={{ marginTop: 8 }} form={form} name="basic" onFinish={onFinish}>
 
-          <Form.Item {...formItemLayout} name="global_title_suffix" label={
-            <span>全局标题后缀&nbsp;
+          <Form.Item {...formItemLayout} name="global_title_suffix"
+            label={
+              <span>全局标题后缀&nbsp;
               <Tooltip title="一般使用组织简称"><QuestionCircleOutlined /></Tooltip>
-            </span>
-          }>
+              </span>
+            }
+            rules={[
+              { required: true, message: '请输入全局标题后缀' },
+            ]}
+          >
             <Input placeholder=" - 地球" style={{ display: 'inline-block', width: 'calc(50%)' }} />
           </Form.Item>
 
@@ -50,7 +55,7 @@ const BaseSettings: React.FC<IBaseSettingsProps> = ({ loading, baseSettings, dis
             { required: true, message: '请输入根URL' },
             { type: 'url', message: '请输入合法的 URL 地址' },
           ]}>
-            <Input placeholder="https://www.xx.xx" />
+            <Input placeholder="https://" />
           </Form.Item>
 
           <Form.Item {...formItemLayout} label="版权声明" name="copyright_notice">

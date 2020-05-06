@@ -20,7 +20,7 @@ const Banners: React.FC = () => {
         setVisible(true)
     }
 
-    const menuMap = [{ key: 'index', name: '首页横幅' }, { key: 'other', name: '其它横幅' },]
+    const menuMap = [{ key: 'index', name: '首页横幅' }]
     const [currentMenukey, setcurrentMenukey] = useState<string>('index')
     const renderChildren = () => {
         switch (currentMenukey) {

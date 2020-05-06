@@ -11,9 +11,14 @@ let websiteBaseSettings: IWebsiteBaseSettings = {
     body_rawcode: '',
 }
 
-let indexSEO: IWebsiteIndexSEO = { title: '首页', keywords: '', description: '' }
+let indexSEO: IWebsiteIndexSEO = {
+    title: '首页',
+    keywords: '',
+    description: '',
+}
 
 export default {
+    // 基本设置
     'GET /api/website/base_settings': (_req: Request, res: Response) => {
         setTimeout(() => res.status(200).send({
             status: 200, message: '成功', data: websiteBaseSettings,
@@ -25,6 +30,8 @@ export default {
             status: 201, message: '成功', data: websiteBaseSettings,
         }), 1000)
     },
+
+    // 首页
     'GET /api/website/index_seo': (_req: Request, res: Response) => {
         setTimeout(() => res.status(200).send({
             status: 200, message: '成功', data: indexSEO,

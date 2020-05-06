@@ -8,7 +8,7 @@ let mockAccounts: IUserAccount[] = [
         account_name: 'admin',
         password: 'admin',
         nickname: Random.name(),
-        email: 'admin@localhost',
+        email: 'admin@localhost.local',
         authority: 'admin',
         enabled: true
     },
@@ -17,7 +17,7 @@ let mockAccounts: IUserAccount[] = [
         account_name: 'user',
         password: 'user',
         nickname: Random.name(),
-        email: 'user@localhost',
+        email: 'user@localhost.local',
         authority: 'user',
         enabled: true
     },
@@ -26,7 +26,7 @@ let mockAccounts: IUserAccount[] = [
         account_name: 'guest',
         password: 'guest',
         nickname: Random.name(),
-        email: 'guest@localhost',
+        email: 'guest@localhost.local',
         authority: 'guest',
         enabled: false
     },

@@ -6,14 +6,14 @@ import { ConnectState, IUserState } from '@/models/connect'
 
 interface IManagementUsersProps {
     dispatch: Dispatch
-    users: IUserState[]
+    banners: IUserState[]
     onShowEditModal: (data: IUserState) => void
     loading?: boolean
     changing?: boolean
     deleting?: boolean
 }
 
-const UsersTable: React.FC<IManagementUsersProps> = ({ dispatch, users, onShowEditModal, loading = false, changing = false, deleting = false }) => {
+const UsersTable: React.FC<IManagementUsersProps> = ({ dispatch, banners, onShowEditModal, loading = false, changing = false, deleting = false }) => {
     useEffect(() => {
         dispatch({ type: 'users/fetchAllUsers' })
     }, [])
@@ -72,13 +72,13 @@ const UsersTable: React.FC<IManagementUsersProps> = ({ dispatch, users, onShowEd
         pagination={false}
         loading={loading}
         columns={columns}
-        dataSource={users}
+        dataSource={banners}
         rowKey={record => record.uuid}
     />
 }
 
-export default connect(({ users, loading }: ConnectState) => ({
-    users,
+export default connect(({ loading }: ConnectState) => ({
+    banners: [],
     loading: loading.effects['users/fetchAllUsers'],
     changing: loading.effects['users/changeUser'],
     deleting: loading.effects['users/deleteUser'],
