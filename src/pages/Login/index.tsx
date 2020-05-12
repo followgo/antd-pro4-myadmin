@@ -1,7 +1,7 @@
 import { Checkbox } from 'antd'
 import React, { useState } from 'react'
 import { connect, Dispatch } from 'umi'
-import { ILoginByAccountParamsType } from '@/services/user'
+import { ILoginByAccountParams } from '@/services/user'
 import { ConnectState } from '@/models/connect'
 import tokenStorage from '@/utils/tokenStorage'
 import LoginForm from './components/LoginForm'
@@ -24,7 +24,7 @@ const Login: React.FC<LoginProps> = (props) => {
     const [autoLogin, setAutoLogin] = useState(false)
     const [type, setType] = useState<string>('account')
 
-    const handleSubmit = (values: ILoginByAccountParamsType) => {
+    const handleSubmit = (values: ILoginByAccountParams) => {
         const { dispatch } = props
         dispatch({ type: 'login/loginByAccount', payload: { ...values } })
     }

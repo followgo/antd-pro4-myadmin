@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export interface ILoginByAccountParamsType {
+export interface ILoginByAccountParams {
   name_or_email: string
   password: string
 }
@@ -17,7 +17,7 @@ export interface IUserAccount {
 }
 
 // 使用用户名和密码登入系统
-export async function loginByAccount(data: ILoginByAccountParamsType) {
+export async function loginByAccount(data: ILoginByAccountParams) {
   return request('/api/user/login/account', { method: 'POST', data })
 }
 

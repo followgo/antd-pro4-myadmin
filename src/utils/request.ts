@@ -66,7 +66,7 @@ const errorHandler = (error: { response: Response, data: IErrorResponseData }): 
  */
 const request = extend({
   errorHandler, // 默认错误处理
-  credentials: 'include', // 默认请求是否带上cookie
+  credentials: 'omit', // 默认请求是否带上cookie
   timeout: 1000 * 8,
 })
 
@@ -96,8 +96,8 @@ request.interceptors.request.use(async (url, options) => {
 // 响应拦截，统一提示成功
 request.interceptors.response.use((res) => {
   if (res.status === 201) {
-    // 登陆和登出不提示
-    if (['/user/login/account', '/user/logout'].indexOf(urlParse(res.url).path || '') === -1) {
+    // 登陆，登出，上传文件使用自定义的消息提示
+    if (['/user/login/account', '/user/logout', '/api/files/banners'].indexOf(urlParse(res.url).path || '') === -1) {
       message.success(codeMessage[res.status])
     }
 

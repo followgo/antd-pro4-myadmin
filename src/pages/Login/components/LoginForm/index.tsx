@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import useMergeValue from 'use-merge-value'
 import classNames from 'classnames'
 import { FormInstance } from 'antd/es/form'
-import { ILoginByAccountParamsType } from '@/services/user'
+import { ILoginByAccountParams } from '@/services/user'
 import LoginContext from './LoginContext'
 import LoginTab from './LoginTab'
 import LoginSubmitButton from './LoginSubmitButton'
@@ -16,7 +16,7 @@ export interface ILoginProps {
     activeKey?: string
     onTabChange?: (key: string) => void
     style?: React.CSSProperties
-    onSubmit?: (values: ILoginByAccountParamsType) => void
+    onSubmit?: (values: ILoginByAccountParams) => void
     className?: string
     from?: FormInstance
     children: React.ReactElement<typeof LoginTab>[]
