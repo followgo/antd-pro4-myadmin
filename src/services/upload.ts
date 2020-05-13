@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import { RcFile } from 'antd/lib/upload/interface'
 
 export interface IUploadFileInfo {
     uuid: string
@@ -9,7 +8,7 @@ export interface IUploadFileInfo {
     md5?: string
 }
 
-export async function uploadBannerFile(file: File, fileMd5: string) {
+export async function uploadBannerFile(file: File, fileMd5 = '') {
     const fd = new FormData()
     fd.append('md5', fileMd5)
     fd.append('file', file)

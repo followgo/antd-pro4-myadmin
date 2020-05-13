@@ -24,3 +24,13 @@ export function randAlphaNum(length: number): string {
 
     return result.join('')
 }
+
+// 读取文件对象，将文件内容转换成 base64
+export function convFileToBase64(file: File | Blob): PromiseLike<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => resolve(reader.result ? reader.result.toString() : '')
+        reader.onerror = error => reject(error)
+    })
+}
