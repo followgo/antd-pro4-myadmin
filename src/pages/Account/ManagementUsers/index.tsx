@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Card } from 'antd'
 import { PageHeaderWrapper } from '@ant-design/pro-layout'
-import { Dispatch } from 'umi'
 import { IUserState } from '@/models/connect'
 import AddButton from './components/AddButton'
 import UsersTable from './components/UsersTable'
@@ -17,7 +16,6 @@ const ManagementUsers: React.FC<IManagementUsersProps> = () => {
     const [current, setCurrent] = useState<Partial<IUserState> | undefined>(undefined)
 
     const showAddModal = () => {
-        console.log(visible)
         setVisible(true)
         setCurrent(undefined)
     };

@@ -44,13 +44,13 @@ const OpModal: FC<OperationModalProps> = ({ visible, current, submiting, onCance
             const patch_fields = ['enabled', 'nickname', 'account_name', 'authority']
             if (resetPassword) patch_fields.push('password')
             dispatch({
-                type: 'users/changeUser', payload: { data: { ...values, uuid: current.uuid }, patch_fields }, callback: () => {
+                type: 'users/patchItem', payload: { data: { ...values, uuid: current.uuid }, patch_fields }, callback: () => {
                     onCancel()
                 }
             })
         } else {
             dispatch({
-                type: 'users/createUser', payload: { ...values, uuid: '' }, callback: () => {
+                type: 'users/createItem', payload: { ...values, uuid: '' }, callback: () => {
                     onCancel()
                 }
             })
@@ -117,5 +117,5 @@ const OpModal: FC<OperationModalProps> = ({ visible, current, submiting, onCance
 }
 
 export default connect(({ loading }: ConnectState) => ({
-    submiting: loading.effects['users/createUser'] || loading.effects['users/changeUser']
+    submiting: loading.effects['users/createItem'] || loading.effects['users/patchItem']
 }))(OpModal)

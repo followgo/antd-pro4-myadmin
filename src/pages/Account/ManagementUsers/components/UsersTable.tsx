@@ -15,15 +15,15 @@ interface IManagementUsersProps {
 
 const UsersTable: React.FC<IManagementUsersProps> = ({ dispatch, users, onShowEditModal, loading = false, changing = false, deleting = false }) => {
     useEffect(() => {
-        dispatch({ type: 'users/fetchAllUsers' })
+        dispatch({ type: 'users/query' })
     }, [])
 
     const handleToggleEnable = (item: IUserState) => {
-        dispatch({ type: 'users/changeUser', payload: { data: { ...item, enabled: !item.enabled }, patch_fields: ['enabled'] } })
+        dispatch({ type: 'users/patchItem', payload: { data: { ...item, enabled: !item.enabled }, patch_fields: ['enabled'] } })
     }
 
     const handleDelete = (item: IUserState) => {
-        dispatch({ type: 'users/deleteUser', payload: { uuid: item.uuid } })
+        dispatch({ type: 'users/deleteItem', payload: { uuid: item.uuid } })
     }
 
     const columns = [
@@ -79,9 +79,9 @@ const UsersTable: React.FC<IManagementUsersProps> = ({ dispatch, users, onShowEd
 
 export default connect(({ users, loading }: ConnectState) => ({
     users,
-    loading: loading.effects['users/fetchAllUsers'],
-    changing: loading.effects['users/changeUser'],
-    deleting: loading.effects['users/deleteUser'],
+    loading: loading.effects['users/query'],
+    changing: loading.effects['users/patchItem'],
+    deleting: loading.effects['users/deleteItem'],
 }))(UsersTable)
 
 

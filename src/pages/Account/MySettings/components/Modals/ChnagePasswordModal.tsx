@@ -31,7 +31,7 @@ const ChangePasswordModal: React.FC<IChangePasswordModalProps> = ({ dispatch, su
         formValues.uuid = userUUID
 
         dispatch({
-            type: 'current_user/changeMyPassword', payload: formValues, callback: () => {
+            type: 'current_user/changePassword', payload: formValues, callback: () => {
                 notification.warning({ description: '请使用新密码登陆', message: '密码已修改' })
                 onCancel()
                 setTimeout(() => history.push('/user/login'), 2000)
@@ -88,5 +88,5 @@ const ChangePasswordModal: React.FC<IChangePasswordModalProps> = ({ dispatch, su
 
 
 export default connect(({ loading }: ConnectState) => ({
-    submitting: loading.effects['current_user/changeMyPassword'],
+    submitting: loading.effects['current_user/changePassword'],
 }))(ChangePasswordModal)

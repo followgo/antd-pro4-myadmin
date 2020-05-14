@@ -26,7 +26,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     if (loginOk) {
       const { dispatch } = this.props
       if (dispatch) {
-        dispatch({ type: 'current_user/fetchMySettings' })
+        dispatch({ type: 'current_user/query' })
       }
 
       this.setState({ isReady: true })

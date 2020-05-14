@@ -38,7 +38,7 @@ class BaseView extends React.Component<IBaseViewProps> {
     const { dispatch } = this.props
     if (dispatch) {
       dispatch({
-        type: 'current_user/changeMySettings',
+        type: 'current_user/updateProfile',
         payload: { data: values, patch_fields: ['account_name', 'nickname', 'email'] }
       })
     }
@@ -88,5 +88,5 @@ class BaseView extends React.Component<IBaseViewProps> {
 }
 
 export default connect(({ loading }: ConnectState) => ({
-  submitting: loading.effects['current_user/changeMySettings'],
+  submitting: loading.effects['current_user/updateProfile'],
 }))(BaseView)
