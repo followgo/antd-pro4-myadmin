@@ -63,7 +63,7 @@ const OpModal: FC<OperationModalProps> = ({ visible, current, submiting, purpose
             <Form {...formLayout} form={form} onFinish={handleFinish}>
                 <Form.Item label="图片" name="uploadFileList" valuePropName="fileList" getValueFromEvent={getValueFromUploadEvent} rules={[
                     { required: true, message: '请上传横幅图片' },
-                ]}>
+                ]} style={{ marginBottom: 24 - 8 }}>
                     <MyPicUpload uploadApi={uploadBannerFile} maximum={1} />
                 </Form.Item>
 
@@ -75,7 +75,7 @@ const OpModal: FC<OperationModalProps> = ({ visible, current, submiting, purpose
                 ]}>
                     <Input />
                 </Form.Item>
-                <Form.Item name="intro" label="介绍">
+                <Form.Item name="description" label="描述">
                     <Input.TextArea />
                 </Form.Item>
                 <Form.Item name="purpose" label="用途">
