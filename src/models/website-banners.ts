@@ -2,7 +2,7 @@ import { Effect, Reducer } from 'umi'
 import { IWebsiteBanner, queryWebsiteBanners, createWebsiteBanners, updateWebsiteBanners, patchWebsiteBanners, deleteWebsiteBanners } from '@/services/website-banners'
 
 export interface IWebsiteBannersModel {
-    namespace: 'website-banners'
+    namespace: 'website_banners'
     state: IWebsiteBanner[]
     effects: {
         query: Effect,
@@ -20,7 +20,7 @@ export interface IWebsiteBannersModel {
 }
 
 const Model: IWebsiteBannersModel = {
-    namespace: 'website-banners',
+    namespace: 'website_banners',
     state: [],
     effects: {
         *query({ callback }, { call, put }) {
@@ -54,7 +54,7 @@ const Model: IWebsiteBannersModel = {
         *deleteItem({ payload: { uuid }, callback }, { call, put }) {
             const res = yield call(deleteWebsiteBanners, uuid)
             if (!res) { // 204 返回，res 为空
-                yield put({ type: 'delete', payload: { uuid } })
+                yield put({ type: 'removeItem', payload: { uuid } })
             }
             if (callback) callback()
         },

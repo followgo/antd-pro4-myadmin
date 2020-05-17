@@ -14,5 +14,14 @@ export default {
                 md5: '97027eb624f85892c69c4bcec8ab0f11',
             }
         })
-    }
+    },
+
+    // 下载
+    'GET /static/files/:uuid': (req: Request, res: Response) => {
+        res.sendFile(`${process.cwd()}/mock/showgirl.jpg`)
+    },
+
+    'GET /static/images/:uuid': (req: Request, res: Response) => {
+        res.sendFile(`${process.cwd()}/mock/showgirl.jpg`)
+    },
 }

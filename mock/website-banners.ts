@@ -6,10 +6,24 @@ let mockBanners: IWebsiteBanner[] = [
     {
         uuid: '5c95ef18-c2c2-47c9-9fb3-f093b7f9663b',
         picture_uuid: '613d614b-db91-4367-8967-357df9201c62',
+        picture_url: '/static/images/613d614b-db91-4367-8967-357df9201c62',
         target_url: 'http://localhost:8000/',
-        title: '企业级产品设计体系，创造高效愉悦的工作体验',
+        title: 'Ant Design Pro',
         description: '基于 Ant Design 设计体系的 React UI 组件库，用于研发企业级中后台产品。',
         purpose: 'index',
+        sort_number: 100,
+        enabled: true,
+    },
+    {
+        uuid: '27ff779f-c038-4ce5-b82b-f576808c289b',
+        picture_uuid: '1f7cf093-03c9-4f0b-9f83-75d04b5ceb2e',
+        picture_url: '/static/images/1f7cf093-03c9-4f0b-9f83-75d04b5ceb2e',
+        target_url: 'http://localhost:8000/',
+        title: 'DvaJS',
+        description: 'dva 首先是一个基于 redux 和 redux-saga 的数据流方案，然后为了简化开发体验，dva 还额外内置了 react-router 和 fetch ，所以也可以理解为一个轻量级的应用框架。',
+        purpose: 'index',
+        sort_number: 99,
+        enabled: true,
     }
 ]
 

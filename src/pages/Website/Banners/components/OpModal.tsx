@@ -67,7 +67,9 @@ const OpModal: FC<OperationModalProps> = ({ visible, current, submiting, purpose
                     <MyPicUpload uploadApi={uploadBannerFile} maximum={1} />
                 </Form.Item>
 
-                <Form.Item name="target_url" label="链接地址">
+                <Form.Item name="target_url" label="链接地址" rules={[
+                    { type: 'url', message: '请输入有效的链接地址' },
+                ]}>
                     <Input />
                 </Form.Item>
                 <Form.Item name="title" label="标题" rules={[

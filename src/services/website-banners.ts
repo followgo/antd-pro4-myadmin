@@ -3,10 +3,13 @@ import request from '@/utils/request'
 export interface IWebsiteBanner {
     uuid: string
     picture_uuid: string
+    picture_url: string
     target_url: string
     title: string
     description: string
     purpose: 'index' | 'other'
+    sort_number: number
+    enabled: boolean
 }
 
 export async function queryWebsiteBanners() {
@@ -22,7 +25,7 @@ export async function updateWebsiteBanners(data: IWebsiteBanner) {
 }
 
 export async function patchWebsiteBanners(data: IWebsiteBanner, patch_fields: string[]) {
-    return request(`/api/website/banners/${data.uuid}`, { method: 'POST', data: { data, patch_fields } })
+    return request(`/api/website/banners/${data.uuid}`, { method: 'PATCH', data: { data, patch_fields } })
 }
 
 export async function deleteWebsiteBanners(uuid: string) {

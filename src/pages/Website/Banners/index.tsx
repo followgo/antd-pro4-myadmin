@@ -3,7 +3,7 @@ import { Card, Menu } from 'antd'
 import { PageHeaderWrapper } from '@ant-design/pro-layout'
 import { IUserState } from '@/models/connect'
 import AddButton from './components/AddButton'
-import UsersTable from './components/UsersTable'
+import BannersTable from './components/BannersTable'
 import OpModal from './components/OpModal'
 
 const Banners: React.FC = () => {
@@ -24,8 +24,8 @@ const Banners: React.FC = () => {
     const [currentMenukey, setcurrentMenukey] = useState<string>('index')
     const renderChildren = () => {
         switch (currentMenukey) {
-            case 'index': return <UsersTable onShowEditModal={showEditModal} />
-            default: return <UsersTable onShowEditModal={showEditModal} />
+            case 'index': return <BannersTable onShowEditModal={showEditModal} />
+            default: return <BannersTable onShowEditModal={showEditModal} />
         }
     }
 
