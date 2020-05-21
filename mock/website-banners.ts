@@ -4,8 +4,8 @@ import { Random } from 'mockjs'
 
 let mockBanners: IWebsiteBanner[] = [
     {
-        uuid: '5c95ef18-c2c2-47c9-9fb3-f093b7f9663b',
-        picture_uuid: '613d614b-db91-4367-8967-357df9201c62',
+        uuid: Random.guid(),
+        picture_uuid: Random.guid(),
         picture_url: '/static/images/613d614b-db91-4367-8967-357df9201c62',
         target_url: 'http://localhost:8000/',
         title: 'Ant Design Pro',
@@ -15,8 +15,8 @@ let mockBanners: IWebsiteBanner[] = [
         enabled: true,
     },
     {
-        uuid: '27ff779f-c038-4ce5-b82b-f576808c289b',
-        picture_uuid: '1f7cf093-03c9-4f0b-9f83-75d04b5ceb2e',
+        uuid: Random.guid(),
+        picture_uuid: Random.guid(),
         picture_url: '/static/images/1f7cf093-03c9-4f0b-9f83-75d04b5ceb2e',
         target_url: 'http://localhost:8000/',
         title: 'DvaJS',
@@ -41,6 +41,7 @@ export default {
     'POST /api/website/banners': (req: Request, res: Response) => {
         const data = req.body
         data.uuid = Random.guid()
+        data.picture_url= `/static/images/${data.uuid}`
         mockBanners.push(data)
         res.status(201).send({ status: 201, message: '成功', data })
     },
@@ -52,6 +53,7 @@ export default {
 
         const existing = mockBanners.some((item, index) => {
             if (item.uuid === uuid) {
+                data.picture_url= `/static/images/${data.uuid}`
                 mockBanners[index] = data
                 res.status(201).send({ status: 201, message: '成功', data })
                 return true

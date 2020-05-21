@@ -3,7 +3,7 @@ import request from '@/utils/request'
 export interface IWebsiteBanner {
     uuid: string
     picture_uuid: string
-    picture_url: string
+    picture_url?: string
     target_url: string
     title: string
     description: string

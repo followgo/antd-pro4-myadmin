@@ -23,9 +23,11 @@ const BannersTable: React.FC<IManagementUsersProps> = ({ dispatch, banners, onSh
         dispatch({ type: 'website_banners/query' })
     }, [])
 
-    const showPreviewImage = (imgUrl: string) => {
-        setPreviewImage(imgUrl)
-        setPreviewVisible(true)
+    const showPreviewImage = (imgUrl?: string) => {
+        if (imgUrl) {
+            setPreviewImage(imgUrl)
+            setPreviewVisible(true)
+        }
     }
 
     const handleToggleEnable = (item: IWebsiteBanner) => {

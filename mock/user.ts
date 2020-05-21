@@ -4,7 +4,7 @@ import { IUserAccount } from '@/services/user'
 
 let mockAccounts: IUserAccount[] = [
     {
-        uuid: '1e07ee4c-ade9-4b6b-91ed-d0e5d7ee7431',
+        uuid: Random.guid(),
         account_name: 'admin',
         password: 'admin',
         nickname: Random.name(),
@@ -13,7 +13,7 @@ let mockAccounts: IUserAccount[] = [
         enabled: true
     },
     {
-        uuid: '685cee85-5c08-4f8a-ade3-b9113af47d8c',
+        uuid: Random.guid(),
         account_name: 'user',
         password: 'user',
         nickname: Random.name(),
@@ -22,7 +22,7 @@ let mockAccounts: IUserAccount[] = [
         enabled: true
     },
     {
-        uuid: '73a7597d-3d7b-4851-aa34-1403489a6e47',
+        uuid: Random.guid(),
         account_name: 'guest',
         password: 'guest',
         nickname: Random.name(),

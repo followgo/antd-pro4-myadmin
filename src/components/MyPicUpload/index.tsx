@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Modal, Upload, message } from 'antd'
 import { UploadProps, UploadChangeParam } from "antd/lib/upload/interface"
 import { PlusOutlined } from '@ant-design/icons'
@@ -10,10 +10,12 @@ interface MyAntdUploadProps extends UploadProps {
     uploadApi: (file: File, md5?: string) => Promise<any>
 }
 
-const MyPicUpload: React.FC<MyAntdUploadProps> = (props) => {
+const MyPicUpload: React.FC<MyAntdUploadProps> = ({ fileList = [], ...restProps }) => {
     const [fileNumber, setFileNumber] = useState(0)
     const [previewVisible, setPreviewVisible] = useState(false)
     const [previewImage, setPreviewImage] = useState('')
+
+    useEffect(() => { setFileNumber(fileList.length) }, [fileList])
 
     // 设置默认值
     const {
@@ -55,23 +57,23 @@ const MyPicUpload: React.FC<MyAntdUploadProps> = (props) => {
         },
         customRequest = (options) => {
             new BMF().md5(options.file, (_err: any, md5: string) => {
-                props.uploadApi(options.file, md5)
+                restProps.uploadApi(options.file, md5)
                     .then(res => options.onSuccess(res, options.file))
                     .catch(err => options.onError(err))
             })
         }
-    } = props
+    } = restProps
 
-    const defProps = {
+    const myProps = {
+        fileList,
         listType,
         accept,
         beforeUpload,
         onPreview,
         customRequest,
         onChange: (info: UploadChangeParam) => {
-            if (props.onChange) props.onChange(info)
+            if (restProps.onChange) restProps.onChange(info)
 
-            setFileNumber(info.fileList.length)
             switch (info.file.status) {
                 case 'done':
                     message.success(`${info.file.name} 文件上传成功`)
@@ -87,8 +89,8 @@ const MyPicUpload: React.FC<MyAntdUploadProps> = (props) => {
 
     return (
         <>
-            <Upload {...props} {...defProps}>
-                {fileNumber >= props.maximum ? null : children}
+            <Upload {...restProps} {...myProps}>
+                {fileNumber >= restProps.maximum ? null : children}
             </Upload>
 
             <Modal width={600} centered visible={previewVisible} footer={null} onCancel={() => setPreviewVisible(false)}>
