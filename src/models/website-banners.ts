@@ -1,5 +1,5 @@
 import { Effect, Reducer } from 'umi'
-import { IWebsiteBanner, queryWebsiteBanners, createWebsiteBanners, updateWebsiteBanners, patchWebsiteBanners, deleteWebsiteBanners } from '@/services/website-banners'
+import { IWebsiteBanner, queryWebsiteBanners, createWebsiteBanner, updateWebsiteBanner, patchWebsiteBanner, deleteWebsiteBanner } from '@/services/website-banners'
 
 export interface IWebsiteBannersModel {
     namespace: 'website_banners'
@@ -31,28 +31,28 @@ const Model: IWebsiteBannersModel = {
             if (callback) callback()
         },
         *updateItem({ payload, callback }, { call, put }) {
-            const res = yield call(updateWebsiteBanners, payload)
+            const res = yield call(updateWebsiteBanner, payload)
             if (res.status === 201) {
                 yield put({ type: 'changeItem', payload: res.data })
             }
             if (callback) callback()
         },
         *patchItem({ payload: { data, patch_fields }, callback }, { call, put }) {
-            const res = yield call(patchWebsiteBanners, data, patch_fields)
+            const res = yield call(patchWebsiteBanner, data, patch_fields)
             if (res.status === 201) {
                 yield put({ type: 'changeItem', payload: res.data })
             }
             if (callback) callback()
         },
         *createItem({ payload, callback }, { call, put }) {
-            const res = yield call(createWebsiteBanners, payload)
+            const res = yield call(createWebsiteBanner, payload)
             if (res.status === 201) {
                 yield put({ type: 'pushItem', payload: res.data })
             }
             if (callback) callback()
         },
         *deleteItem({ payload: { uuid }, callback }, { call, put }) {
-            const res = yield call(deleteWebsiteBanners, uuid)
+            const res = yield call(deleteWebsiteBanner, uuid)
             if (!res) { // 204 返回，res 为空
                 yield put({ type: 'removeItem', payload: { uuid } })
             }

@@ -38,10 +38,6 @@ export async function createUserAccount(data: IUserAccount) {
   return request('/api/user/accounts', { method: 'POST', data })
 }
 
-// export async function updateUserAccount(data: IUserAccount) {
-//   return request(`/api/user/accounts/${data.uuid}`, { method: 'PUT', data })
-// }
-
 export async function patchUserAccount(data: IUserAccount & { new_password?: string }, patch_fields: string[]) {
   return request(`/api/user/accounts/${data.uuid}`, { method: 'PATCH', data: { data, patch_fields } })
 }

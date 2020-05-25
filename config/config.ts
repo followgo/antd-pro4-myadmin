@@ -103,6 +103,12 @@ export default defineConfig({
                   path: '/website/banners',
                   component: './Website/Banners',
                 },
+                {
+                  name: 'content_tags',
+                  icon: 'TagsOutlined',
+                  path: '/website/content_tags',
+                  component: './Website/ContentTags',
+                },
               ],
             },
             {

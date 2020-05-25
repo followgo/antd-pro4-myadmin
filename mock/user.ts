@@ -106,7 +106,7 @@ export default {
     },
 
     // 返回所有用户账号信息
-    'GET /api/user/accounts': (req: Request, res: Response) => {
+    'GET /api/user/accounts': (_req: Request, res: Response) => {
         setTimeout(() => res.status(200).send({
             status: 200,
             message: '成功',

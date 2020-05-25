@@ -25,4 +25,5 @@ export default {
   'menu.website.base': '基本设置',
   'menu.website.index_seo_settings': '首页SEO',
   'menu.website.banners': '横幅',
+  'menu.website.content_tags': '内容标签',
 }

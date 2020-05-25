@@ -31,17 +31,17 @@ let mockBanners: IWebsiteBanner[] = [
 export default {
     'GET /api/website/banners': (req: Request, res: Response) => {
         const { purpose = 'index' } = req.query
-        res.status(200).send({
+        setTimeout(() => res.status(200).send({
             status: 200,
             message: '成功',
             data: mockBanners.filter(item => item.purpose === purpose)
-        })
+        }), 1000)
     },
 
     'POST /api/website/banners': (req: Request, res: Response) => {
         const data = req.body
         data.uuid = Random.guid()
-        data.picture_url= `/static/images/${data.uuid}`
+        data.picture_url = `/static/images/${data.uuid}`
         mockBanners.push(data)
         res.status(201).send({ status: 201, message: '成功', data })
     },
@@ -53,7 +53,7 @@ export default {
 
         const existing = mockBanners.some((item, index) => {
             if (item.uuid === uuid) {
-                data.picture_url= `/static/images/${data.uuid}`
+                data.picture_url = `/static/images/${data.uuid}`
                 mockBanners[index] = data
                 res.status(201).send({ status: 201, message: '成功', data })
                 return true

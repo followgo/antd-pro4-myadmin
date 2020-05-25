@@ -5,6 +5,7 @@ import { IWebsiteBanner as IWebsiteBannerState } from '@/services/website-banner
 import { IGlobalState } from './global'
 import { ISettingState } from './setting'
 import { ILoginState } from './login'
+import { ITagState, ITagModel } from './tags'
 
 export {
   IGlobalState,
@@ -14,6 +15,7 @@ export {
   IWebsiteBaseState,
   IWebsiteIndexSEOState,
   IWebsiteBannerState,
+  ITagState
 }
 
 export interface ILoading {
@@ -32,6 +34,7 @@ export interface ConnectState {
   website_base: IWebsiteBaseState
   website_indexseo: IWebsiteIndexSEOState
   website_banners: IWebsiteBannerState[]
+  tags: ITagState[]
 }
 
 export interface Route extends MenuDataItem {

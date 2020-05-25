@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { CloseOutlined, CheckOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { Table, Tag, Popconfirm, Button } from 'antd'
+import { Table, Space, Tag, Popconfirm, Button } from 'antd'
 import { connect, Dispatch } from 'umi'
 import { ConnectState } from '@/models/connect'
 import { IUserAccount } from '@/services/user'
@@ -56,13 +56,15 @@ const UsersTable: React.FC<IManagementUsersProps> = ({ dispatch, users, onShowEd
             }
         },
         {
-            title: '行动', key: 'action', render: (_: any, record: IUserAccount) => {
+            title: '行动', key: 'action', width:110,  render: (_: any, record: IUserAccount) => {
                 return (
                     <>
-                        <Button onClick={() => onShowEditModal(record)} size="small" icon={<EditOutlined />} style={{ marginRight: 10 }} />
-                        <Popconfirm onConfirm={() => handleDelete(record)} title='删除此用户？'>
-                            <Button loading={deleting} size="small" danger icon={<DeleteOutlined />} />
-                        </Popconfirm>
+                        <Space size="small">
+                            <Button onClick={() => onShowEditModal(record)} size="small" icon={<EditOutlined />} />
+                            <Popconfirm onConfirm={() => handleDelete(record)} title='删除此用户？'>
+                                <Button loading={deleting} size="small" danger icon={<DeleteOutlined />} />
+                            </Popconfirm>
+                        </Space>
                     </>
                 )
             }
@@ -80,9 +82,9 @@ const UsersTable: React.FC<IManagementUsersProps> = ({ dispatch, users, onShowEd
 
 export default connect(({ users, loading }: ConnectState) => ({
     users,
-    loading: loading.effects['users/query']||false,
-    changing: loading.effects['users/patchItem']||false,
-    deleting: loading.effects['users/deleteItem']||false,
+    loading: loading.effects['users/query'] || false,
+    changing: loading.effects['users/patchItem'] || false,
+    deleting: loading.effects['users/deleteItem'] || false,
 }))(UsersTable)
 
 

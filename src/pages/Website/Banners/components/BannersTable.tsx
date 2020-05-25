@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { CloseOutlined, CheckOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { Table, Popconfirm, Button, Modal, InputNumber } from 'antd'
+import { Table, Popconfirm, Button, Modal, InputNumber, Space } from 'antd'
 import { connect, Dispatch } from 'umi'
 import { ConnectState, IWebsiteBannerState } from '@/models/connect'
 import { IWebsiteBanner } from '@/services/website-banners'
@@ -19,9 +19,7 @@ const BannersTable: React.FC<IManagementUsersProps> = ({ dispatch, banners, onSh
     const [previewImage, setPreviewImage] = useState('')
     const [countdownTimer, setCountdownTimer] = useState<Map<string, number>>(new Map())
 
-    useEffect(() => {
-        dispatch({ type: 'website_banners/query' })
-    }, [])
+    useEffect(() => { dispatch({ type: 'website_banners/query' }) }, [])
 
     const showPreviewImage = (imgUrl?: string) => {
         if (imgUrl) {
@@ -70,7 +68,7 @@ const BannersTable: React.FC<IManagementUsersProps> = ({ dispatch, banners, onSh
         { title: '描述', dataIndex: 'description', key: 'description' },
         {
             title: '排序编号', key: 'sort_number', width: 100,
-            sorter: (a: IWebsiteBanner, b: IWebsiteBanner) => a.sort_number - b.sort_number, defaultSortOrder: 'ascend',
+            sorter: (a: IWebsiteBanner, b: IWebsiteBanner) => a.sort_number - b.sort_number, defaultSortOrder: "ascend",
             render: (_text: string, record: IWebsiteBanner) => {
                 return (
                     <InputNumber disabled={changing} min={1} max={200} step={1} value={record.sort_number} onChange={value => handleSort(record, value || 0)} />
@@ -90,10 +88,12 @@ const BannersTable: React.FC<IManagementUsersProps> = ({ dispatch, banners, onSh
             title: '行动', key: 'action', width: 110, render: (_text: string, record: IWebsiteBanner) => {
                 return (
                     <>
-                        <Button onClick={() => onShowEditModal(record)} size="small" icon={<EditOutlined />} style={{ marginRight: 10 }} />
-                        <Popconfirm onConfirm={() => handleDelete(record)} title='删除此横幅？'>
-                            <Button loading={deleting} size="small" danger icon={<DeleteOutlined />} />
-                        </Popconfirm>
+                        <Space size="small">
+                            <Button onClick={() => onShowEditModal(record)} size="small" icon={<EditOutlined />} />
+                            <Popconfirm onConfirm={() => handleDelete(record)} title='删除此横幅？'>
+                                <Button loading={deleting} size="small" danger icon={<DeleteOutlined />} />
+                            </Popconfirm>
+                        </Space>
                     </>
                 )
             }
