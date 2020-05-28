@@ -2,12 +2,12 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
-import { extend } from 'umi-request'
-import { history } from 'umi'
-import { notification, message } from 'antd'
-import { parse as urlParse } from 'url'
-import { stringify } from 'querystring'
-import tokenStorage, { refreshToken } from './tokenStorage'
+import { extend } from 'umi-request';
+import { history } from 'umi';
+import { notification, message } from 'antd';
+import { parse as urlParse } from 'url';
+import { stringify } from 'querystring';
+import tokenStorage, { refreshToken } from './tokenStorage';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -25,41 +25,40 @@ const codeMessage = {
   502: '网关错误。',
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
-}
+};
 
 export interface IErrorResponseData {
-  status: number
-  message: string
+  status: number;
+  message: string;
 }
 
 export interface IBaseResponseData<T = any> {
-  status: number
-  message: string
-  data: T
+  status: number;
+  message: string;
+  data: T;
 }
 
 /**
  * 异常处理程序
  */
-const errorHandler = (error: { response: Response, data: IErrorResponseData }): Response => {
-  const { response, data: errData } = error
+const errorHandler = (error: { response: Response; data: IErrorResponseData }): Response => {
+  const { response, data: errData } = error;
 
   if (response && response.status) {
-    const errorText = errData.message || (codeMessage[response.status] || response.statusText)
-    notification.error({ message: `请求错误（${response.status}）`, description: errorText })
+    const errorText = errData.message || codeMessage[response.status] || response.statusText;
+    notification.error({ message: `请求错误（${response.status}）`, description: errorText });
 
     // 非登陆请求的响应遇到 401 错误，则跳转到登陆页面
     if (response.status === 401 && urlParse(response.url).path !== '/user/login/account') {
-      const queryString = stringify({ redirect: window.location.href })
-      history.push(`/user/login?${queryString}`)
+      const queryString = stringify({ redirect: window.location.href });
+      history.push(`/user/login?${queryString}`);
     }
-
   } else if (!response) {
-    notification.error({ description: '您的网络发生异常，无法连接到服务器', message: '网络异常' })
+    notification.error({ description: '您的网络发生异常，无法连接到服务器', message: '网络异常' });
   }
 
-  return response
-}
+  return response;
+};
 
 /**
  * 配置request请求时的默认参数
@@ -68,44 +67,47 @@ const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'omit', // 默认请求是否带上cookie
   timeout: 1000 * 8,
-})
+});
 
 // 添加 token, 自动刷新 token
 request.interceptors.request.use(async (url, options) => {
-  const { access_token = '', token_obtain_at = '0', token_expires_in = '0' } = tokenStorage.get()
-  let current_access_token = access_token
+  const { access_token = '', token_obtain_at = '0', token_expires_in = '0' } = tokenStorage.get();
+  let current_access_token = access_token;
 
   // access_token 为空，则跳过
-  if (!access_token) return ({ url, options })
+  if (!access_token) return { url, options };
 
   // 跳过 登陆 和 刷新token 的请求
-  if (['/user/login/account', '/user/refresh_token'].indexOf(url) !== -1) return ({ url, options })
+  if (['/user/login/account', '/user/refresh_token'].indexOf(url) !== -1) return { url, options };
 
   // 检查 token 剩余的生命
   // 如果已经过期，或者立即过期，则刷新 token
-  const lifetime = parseInt(token_expires_in, 10) * 1000 - (new Date().getTime() - new Date(token_obtain_at).getTime())
-  if (lifetime < 1000 * 10) { // 剩余的生命少于 10 秒
-    current_access_token = await refreshToken()
+  const lifetime =
+    parseInt(token_expires_in, 10) * 1000 -
+    (new Date().getTime() - new Date(token_obtain_at).getTime());
+  if (lifetime < 1000 * 10) {
+    // 剩余的生命少于 10 秒
+    current_access_token = await refreshToken();
   }
 
-  const { headers = [] } = options
-  headers['X-AUTH-TOKEN'] = current_access_token
-  return ({ url, options: { ...options, headers } })
-})
+  const { headers = [] } = options;
+  headers['X-AUTH-TOKEN'] = current_access_token;
+  return { url, options: { ...options, headers } };
+});
 
 // 响应拦截，统一提示成功
 request.interceptors.response.use((res) => {
   if (res.status === 201) {
     // 登陆，登出，上传文件使用自定义的消息提示
-    if (['/user/login/account', '/user/logout', '/api/files/banners'].indexOf(urlParse(res.url).path || '') === -1) {
-      message.success(codeMessage[res.status])
+    const ignorePaths = ['/api/user/login/account', '/api/user/logout', '/api/files/banners'];
+    if (ignorePaths.indexOf(urlParse(res.url).path || '') === -1) {
+      message.success(codeMessage[res.status]);
     }
-
   } else if (res.status === 202 || res.status === 204) {
-    message.success(codeMessage[res.status])
+    message.success(codeMessage[res.status]);
   }
 
-  return res
-})
+  return res;
+});
 
-export default request
+export default request;

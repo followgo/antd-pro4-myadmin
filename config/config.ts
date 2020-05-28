@@ -7,7 +7,7 @@ export default defineConfig({
   hash: true,
   antd: {},
   dva: {
-    hmr: true //是否启用 dva 的 热更新
+    hmr: true, //是否启用 dva 的 热更新
   },
   locale: {
     // default zh-CN
@@ -84,7 +84,7 @@ export default defineConfig({
                 {
                   component: './Exception/404',
                 },
-              ]
+              ],
             },
             {
               name: 'account',
@@ -93,7 +93,7 @@ export default defineConfig({
               routes: [
                 {
                   name: 'settings',
-                  icon: 'ProfileOutlined',
+                  icon: 'SolutionOutlined',
                   path: '/account/my_settings',
                   component: './Account/MySettings',
                 },
@@ -189,8 +189,7 @@ export default defineConfig({
     // ...darkTheme,
     'primary-color': defaultSettings.primaryColor,
   },
-  // @ts-ignore
-  title: false,
+  title: '后台管理Pro4',
   ignoreMomentLocale: true,
   proxy: proxy[REACT_APP_ENV || 'dev'],
   manifest: {
