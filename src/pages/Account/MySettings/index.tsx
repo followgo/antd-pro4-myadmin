@@ -40,7 +40,7 @@ class Settings extends Component<IMySettingsProps, IMySettingsState> {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch({ type: 'current_user/mysettings' });
+    dispatch({ type: 'current_user/query' });
     window.addEventListener('resize', this.resize);
     this.resize();
   }

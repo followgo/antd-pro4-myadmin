@@ -1,6 +1,8 @@
-import { parse } from 'querystring';
-import pathRegexp from 'path-to-regexp';
-import { Route } from '@/models/connect';
+import { parse } from 'querystring'
+import { pathToRegexp } from 'path-to-regexp'
+import { Route } from '@/models/connect'
+
+
 
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -36,7 +38,7 @@ export const getAuthorityFromRouter = <T extends Route>(
 ): T | undefined => {
   const authority = router.find(
     ({ routes, path = '/' }) =>
-      (path && pathRegexp(path).exec(pathname)) ||
+      (path && pathToRegexp(path).exec(pathname)) ||
       (routes && getAuthorityFromRouter(routes, pathname)),
   );
   if (authority) return authority;
@@ -47,7 +49,7 @@ export const getRouteAuthority = (path: string, routeData: Route[]) => {
   let authorities: string[] | string | undefined;
   routeData.forEach((route) => {
     // match prefix
-    if (pathRegexp(`${route.path}/(.*)`).test(`${path}/`)) {
+    if (pathToRegexp(`${route.path}/(.*)`).test(`${path}/`)) {
       if (route.authority) {
         authorities = route.authority;
       }

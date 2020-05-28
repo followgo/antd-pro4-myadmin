@@ -24,7 +24,8 @@ import styles from './BaseView.less'
 interface IBaseViewProps {
   dispatch: Dispatch
   currentUser: IUserState
-  submitting?: boolean
+  loading?: boolean
+  updating?: boolean
 }
 
 class BaseView extends React.Component<IBaseViewProps> {
@@ -45,7 +46,7 @@ class BaseView extends React.Component<IBaseViewProps> {
   };
 
   render() {
-    const { currentUser, submitting } = this.props;
+    const { currentUser, loading, updating } = this.props;
     return (
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
@@ -75,7 +76,9 @@ class BaseView extends React.Component<IBaseViewProps> {
             </Form.Item>
 
             <Form.Item>
-              <Button htmlType="submit" type="primary" loading={submitting}>更新</Button>
+              <Button htmlType="submit" type="primary" loading={loading || updating}>
+                {loading ? '加载...' : '更新'}
+              </Button>
             </Form.Item>
           </Form>
         </div>
@@ -88,5 +91,6 @@ class BaseView extends React.Component<IBaseViewProps> {
 }
 
 export default connect(({ loading }: ConnectState) => ({
-  submitting: loading.effects['current_user/updateProfile'],
+  loading: loading.effects['current_user/query'],
+  updating: loading.effects['current_user/updateProfile'],
 }))(BaseView)

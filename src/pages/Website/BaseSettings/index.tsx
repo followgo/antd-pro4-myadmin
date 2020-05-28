@@ -9,11 +9,12 @@ import { IWebsiteBaseSettings } from '@/services/website-settings';
 
 interface IBaseSettingsProps {
   loading?: boolean
+  updating?: boolean
   baseSettings: IWebsiteBaseSettings
   dispatch: Dispatch
 }
 
-const BaseSettings: React.FC<IBaseSettingsProps> = ({ loading, baseSettings, dispatch }) => {
+const BaseSettings: React.FC<IBaseSettingsProps> = ({ loading, updating, baseSettings, dispatch }) => {
   const [form] = Form.useForm()
   const formItemLayout = {
     labelCol: { xs: { span: 24 }, sm: { span: 7 } },
@@ -90,9 +91,9 @@ const BaseSettings: React.FC<IBaseSettingsProps> = ({ loading, baseSettings, dis
           </Form.Item>
 
           <Form.Item {...submitFormLayout} style={{ marginTop: 32 }}>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              更新
-          </Button>
+            <Button type="primary" htmlType="submit" loading={updating || loading}>
+              {loading ? '加载...' : '更新'}
+            </Button>
           </Form.Item>
         </Form>
       </Card>
@@ -102,5 +103,6 @@ const BaseSettings: React.FC<IBaseSettingsProps> = ({ loading, baseSettings, dis
 
 export default connect(({ website_base, loading }: ConnectState) => ({
   baseSettings: website_base,
-  loading: loading.effects['website_base/fetch'] || loading.effects['website_base/update'],
+  loading: loading.effects['website_base/fetch'],
+  updating: loading.effects['website_base/update'],
 }))(BaseSettings)

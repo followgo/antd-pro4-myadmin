@@ -9,11 +9,12 @@ import { IWebsiteIndexSEO } from '@/services/website-settings';
 
 interface IBaseSettingsProps {
   loading?: boolean
+  updating?: boolean
   seo: IWebsiteIndexSEO
   dispatch: Dispatch
 }
 
-const IndexSEO: React.FC<IBaseSettingsProps> = ({ loading, seo, dispatch }) => {
+const IndexSEO: React.FC<IBaseSettingsProps> = ({ loading, updating, seo, dispatch }) => {
   const [form] = Form.useForm()
   const formItemLayout = {
     labelCol: { xs: { span: 24 }, sm: { span: 7 } },
@@ -57,9 +58,9 @@ const IndexSEO: React.FC<IBaseSettingsProps> = ({ loading, seo, dispatch }) => {
           </Form.Item>
 
           <Form.Item {...submitFormLayout} style={{ marginTop: 32 }}>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              更新
-          </Button>
+            <Button type="primary" htmlType="submit" loading={updating || loading}>
+              {loading ? '加载...' : '更新'}
+            </Button>
           </Form.Item>
         </Form>
       </Card>
@@ -69,5 +70,6 @@ const IndexSEO: React.FC<IBaseSettingsProps> = ({ loading, seo, dispatch }) => {
 
 export default connect(({ website_indexseo, loading }: ConnectState) => ({
   seo: website_indexseo,
-  loading: loading.effects['website_indexseo/fetch'] || loading.effects['website_indexseo/update'],
+  loading: loading.effects['website_indexseo/fetch'],
+  updating: loading.effects['website_indexseo/update'],
 }))(IndexSEO)
