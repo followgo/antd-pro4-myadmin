@@ -56,7 +56,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: '后台管理 Pro4',
+  title: '后台管理Pro4',
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings

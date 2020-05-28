@@ -6,7 +6,7 @@ import CodePreview from '@/components/CodePreview'
 export default (): React.ReactNode => (
   <PageHeaderWrapper title={false}>
     <Card>
-      <CodePreview>Hello UmiJS</CodePreview>
+      <CodePreview>Keep It Simple And Specific</CodePreview>
     </Card>
   </PageHeaderWrapper>
 )

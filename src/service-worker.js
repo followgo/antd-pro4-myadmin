@@ -3,7 +3,7 @@
 /* eslint-disable no-underscore-dangle */
 /* globals workbox */
 workbox.core.setCacheNameDetails({
-  prefix: '后台管理系统 Pro4',
+  prefix: '后台管理Pro4',
   suffix: 'v1',
 });
 // Control all opened tabs ASAP

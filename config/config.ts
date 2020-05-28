@@ -7,7 +7,7 @@ export default defineConfig({
   hash: true,
   antd: {},
   dva: {
-    hmr: true,
+    hmr: true //是否启用 dva 的 热更新
   },
   locale: {
     // default zh-CN
@@ -57,6 +57,34 @@ export default defineConfig({
               name: 'welcome',
               icon: 'smile',
               component: './Welcome',
+            },
+            {
+              path: '/news_center',
+              name: 'news_center',
+              icon: 'ReadOutlined',
+              routes: [
+                {
+                  path: '/news_center/release',
+                  name: 'release',
+                  icon: 'FormOutlined',
+                  component: './Welcome',
+                },
+                {
+                  path: '/news_center/management',
+                  name: 'management',
+                  icon: 'ProfileOutlined',
+                  component: './Welcome',
+                },
+                {
+                  path: '/news_center/categories',
+                  name: 'categories',
+                  icon: 'MenuOutlined',
+                  component: './Welcome',
+                },
+                {
+                  component: './Exception/404',
+                },
+              ]
             },
             {
               name: 'account',

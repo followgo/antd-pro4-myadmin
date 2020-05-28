@@ -48,7 +48,7 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
           <div className={styles.top}>
             <div className={styles.header}>
               <img alt="logo" className={styles.logo} src={logo} />
-              <span className={styles.title}>后台管理 Pro4</span>
+              <span className={styles.title}>后台管理Pro4</span>
             </div>
             <div className={styles.desc}>[ Designed by Bing in 2020 ]</div>
           </div>
