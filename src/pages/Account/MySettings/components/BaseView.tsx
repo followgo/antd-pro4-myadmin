@@ -1,4 +1,4 @@
-import { Button, Input, Form, message } from 'antd'
+import { Button, Input, Form } from 'antd'
 import React from 'react'
 import { connect, Dispatch } from 'umi'
 import { ConnectState, IUserState } from '@/models/connect'

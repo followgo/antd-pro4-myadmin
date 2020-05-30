@@ -79,7 +79,7 @@ export default defineConfig({
                   path: '/news_center/categories',
                   name: 'categories',
                   icon: 'MenuOutlined',
-                  component: './Welcome',
+                  component: './NewsCenter/Categories',
                 },
                 {
                   component: './Exception/404',
