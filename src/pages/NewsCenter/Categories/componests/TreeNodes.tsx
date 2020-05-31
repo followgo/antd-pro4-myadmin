@@ -1,116 +1,127 @@
 import React from 'react'
-import { Tree } from 'antd'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { DataNode, Key, EventDataNode } from 'rc-tree/lib/interface';
+import { Tree, message } from 'antd'
+import { AntTreeNodeDropEvent, AntTreeNodeProps } from 'antd/lib/tree/Tree'
 
-export interface TreeNode {
+export interface MyTreeMenuItem {
     title: string,
     key: string,
-    children?: TreeNode[]
+    children: MyTreeMenuItem[]
 }
 
-const treeData: TreeNode[] = [
+const treeData: MyTreeMenuItem[] = [
     {
         title: 'parent 1',
         key: '0-0',
         children: [
             {
                 title: 'parent 1-0',
-                key: '0-0-0'
+                key: '0-0-0',
+                children: [],
             },
             {
                 title: 'parent 1-2',
                 key: '0-0-2',
                 children: [
-                    { title: 'leaf', key: '0-0-2-0', },
+                    { title: 'leaf', key: '0-0-2-0', children: [], },
                     {
                         title: 'leaf',
-                        key: '0-0-2-1',
+                        key: '0-0-2-1', children: [],
                     },
                 ],
             },
             {
                 title: 'parent 2-0',
-                key: '0-22-0',
+                key: '0-22-0', children: [],
             },
         ],
     },
 ];
 
 const TreeNodes: React.FC<{}> = () => {
+    const [tData, setTData] = React.useState(treeData)
+
     // 单击node事件
-    const handleSelect = (selectedKeys: Key[]) => {
-        if (!selectedKeys || selectedKeys.length === 0) return
-        console.log('selected', selectedKeys)
-    };
+    const handleClick = (node: AntTreeNodeProps) => {
+        console.log(node)
+    }
 
     // 拖动放下事件
-    const handleDrop = (info: { node: EventDataNode; dragNode: EventDataNode; dragNodesKeys: Key[]; dropPosition: number; dropToGap: boolean }) => {
-        const { node: dropNode, dragNode, dragNodesKeys, dropPosition, dropToGap } = info
+    const handleDrop = (info: AntTreeNodeDropEvent) => {
+        const newData = [...treeData]
+        const { node, dragNode, dropPosition, dropToGap } = info
+        const { key: nodeKey, children: _nodeChildren, expanded: nodeIsExpanded } = (node as AntTreeNodeProps)
+        const nodeChildren = (_nodeChildren as MyTreeMenuItem[] || undefined)
+        const { key: dragNodeKey } = (dragNode as AntTreeNodeProps)
 
-        const loop = (data: TreeNode[], key: string, callback: (item: TreeNode, index: number, arr: TreeNode[]) => void) => {
+        // 检查参数
+        if (!nodeKey || !dragNodeKey) {
+            message.error('对象的 Key 为空或未定义')
+            return
+        }
+
+        // 递归查询节点
+        const loop = (data: MyTreeMenuItem[], key: string | number, callback: (index: number, arr: MyTreeMenuItem[]) => void) => {
             for (let i = 0; i < data.length; i += 1) {
                 if (data[i].key === key) {
-                    callback(data[i], i, data)
+                    callback(i, data)
                     break
-                } else {
-                    const { children = [] } = data[i]
-                    if (children.length) loop(children, key, callback)
+                }
+
+                const { children = [] } = data[i]
+                if (children.length > 0) {
+                    loop(children, key, callback)
                 }
             }
         }
 
-
-        const data = [...treeData]
-
-        // 找被拖拽的对象
-        let dragObj
-        loop(data, dragNode.key.toString(), (item, index, arr) => {
+        // 查找被拖拽的条目
+        let dragItem: MyTreeMenuItem = { title: '', key: '', children: [] }
+        loop(newData, dragNodeKey, (index, arr) => {
+            dragItem = arr[index]
             arr.splice(index, 1)
-            dragObj = item;
-        });
+        })
+        if (!dragItem.key) {
+            message.warning('被拖拽的对象为空')
+            return
+        }
 
-        if (!info.dropToGap) {
-            // Drop on the content
-            loop(data, dropNode.key.toString(), (item, index, arr) => {
-                item.children = item.children || [];
-                item.children.push(dragObj);
-            });
-        } else if (
-            (info.node.props.children || []).length > 0 && // Has children
-            info.node.props.expanded && // Is expanded
-            dropPosition === 1 // On the bottom gap
-        ) {
-            loop(data, dropKey, item => {
-                item.children = item.children || [];
-                // where to insert 示例添加到头部，可以是随意位置
-                item.children.unshift(dragObj);
-            });
+        if (!dropToGap) { // Drop on the content
+            loop(newData, nodeKey, (index, arr) => {
+                const item = arr[index]
+                item.children.push(dragItem)
+            })
+
+        } else if ((nodeChildren || []).length > 0 && nodeIsExpanded && dropPosition === 1) {
+            loop(newData, nodeKey, (index, arr) => {// 添加到头部
+                arr[index].children.unshift(dragItem)
+            })
+
         } else {
-            let ar;
-            let i;
-            loop(data, dropKey, (item, index, arr) => {
-                ar = arr;
-                i = index;
-            });
+            let droppedOnChildren: MyTreeMenuItem[] = []
+            let childrenIdx: number = 0
+            loop(newData, nodeKey, (index, arr) => {
+                childrenIdx = index
+                droppedOnChildren = arr
+            })
+
             if (dropPosition === -1) {
-                ar.splice(i, 0, dragObj);
+                droppedOnChildren.splice(childrenIdx, 0, dragItem)
             } else {
-                ar.splice(i + 1, 0, dragObj);
+                droppedOnChildren.splice(childrenIdx + 1, 0, dragItem)
             }
         }
 
-        // this.setState({
-        //     gData: data,
-        // });
-    };
+        setExpandedKeys([dragItem.key])
+
+        setTData(newData)
+    }
 
     return (
-        <Tree className="draggable-tree"
-            blockNode showLine autoExpandParent defaultExpandAll defaultExpandParent draggable
-            treeData={treeData}
-            onSelect={handleSelect} // 点击触发
-            onDrop={handleDrop}
+        <Tree className="draggable-tree" treeData={tData}
+            blockNode showLine draggable
+            defaultExpandParent autoExpandParent defaultExpandAll
+            onDrop={info => handleDrop(info)}
+            onClick={(_e, node) => handleClick(node)}
         />
     )
 }
