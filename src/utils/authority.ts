@@ -1,10 +1,11 @@
-import { reloadAuthorized } from './Authorized'
+import { reloadAuthorized } from './Authorized';
 
-const storageKey: string = 'antd-pro-authority'
+const storageKey: string = 'x-site-authority';
 
 // use localStorage to store the authority info, which might be sent from server in actual project.
 export function getAuthority(str?: string): string | string[] {
-  const authorityString = typeof str === 'undefined' && sessionStorage ? sessionStorage.getItem(storageKey) : str;
+  const authorityString =
+    typeof str === 'undefined' && sessionStorage ? sessionStorage.getItem(storageKey) : str;
   // authorityString could be admin, "admin", ["admin"]
   let authority;
   try {

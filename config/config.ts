@@ -140,9 +140,8 @@ export default defineConfig({
               ],
             },
             {
-              // 错误页面
+              // 错误页面路由不显示在菜单中
               hideInMenu: true,
-              // 路由不显示在菜单中
               name: 'exception',
               icon: 'WarningOutlined',
               path: '/exception',

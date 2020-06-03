@@ -1,20 +1,20 @@
-import { Subscription, Reducer } from 'umi'
+import { Subscription, Reducer } from 'umi';
 
-export interface IGlobalState {
-  collapsed: boolean
+export interface GlobalModelState {
+  collapsed: boolean;
 }
 
-export interface IGlobalModel {
-  namespace: 'global'
-  state: IGlobalState
-  effects: {}
+export interface GlobalModelType {
+  namespace: 'global';
+  state: GlobalModelState;
+  effects: {};
   reducers: {
-    changeLayoutCollapsed: Reducer<IGlobalState>
+    changeLayoutCollapsed: Reducer<GlobalModelState>;
   };
-  subscriptions: { setup: Subscription }
+  subscriptions: { setup: Subscription };
 }
 
-const Model: IGlobalModel = {
+const GlobalModel: GlobalModelType = {
   namespace: 'global',
 
   state: {
@@ -24,8 +24,11 @@ const Model: IGlobalModel = {
   effects: {},
 
   reducers: {
-    changeLayoutCollapsed(state = { collapsed: true }, { payload }) {
-      return { ...state, collapsed: payload }
+    changeLayoutCollapsed(state = { collapsed: true }, { payload }): GlobalModelState {
+      return {
+        ...state,
+        collapsed: payload,
+      };
     },
   },
 
@@ -34,11 +37,11 @@ const Model: IGlobalModel = {
       // Subscribe history(url) change, trigger `load` action if pathname is `/`
       history.listen(({ pathname, search }): void => {
         if (typeof window.ga !== 'undefined') {
-          window.ga('send', 'pageview', pathname + search)
+          window.ga('send', 'pageview', pathname + search);
         }
-      })
+      });
     },
   },
-}
+};
 
-export default Model
+export default GlobalModel;

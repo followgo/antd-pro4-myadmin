@@ -3,8 +3,8 @@
 /* eslint-disable no-underscore-dangle */
 /* globals workbox */
 workbox.core.setCacheNameDetails({
-  prefix: '后台管理Pro4',
-  suffix: 'v1',
+  prefix: '后台管理',
+  suffix: 'Pro4',
 });
 // Control all opened tabs ASAP
 workbox.clientsClaim();
