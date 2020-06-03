@@ -21,7 +21,9 @@ const PopMenu: React.FC<PopMenuProps> = ({ pos, onHide }) => {
 
   return (
     <div style={blockStyle} onMouseLeave={onHide}>
-      <Menu mode="inline" style={menuStyle}>
+      <Menu mode="inline" style={menuStyle} onClick={(info)=>{
+        console.log(info)
+      }}>
         <Menu.Item key="1" icon={<PlusOutlined />}>
           新建子项
         </Menu.Item>

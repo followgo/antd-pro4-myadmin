@@ -43,7 +43,7 @@ const ContentTags: React.FC<{ dispatch: Dispatch, tags: ITagState[], loading?: b
     e.preventDefault() // 阻止默认的删除事件
 
     Modal.confirm({
-      title: '你确定要删除此标签吗？',
+      title: '确定要删除此标签吗？',
       icon: <ExclamationCircleOutlined />,
       content: `标签：${tag.name}`,
       okType: 'danger',

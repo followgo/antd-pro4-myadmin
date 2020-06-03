@@ -41,10 +41,7 @@ const TreeNodes: React.FC<{}> = () => {
     y: 0,
   });
   const [tData, setTData] = React.useState(treeData);
-  const [selectedKeys, setSelectKeys] = React.useState<string[]>([]); // 被选中的node
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let currentSelectedNode: DataNode; // 当前选择的node
+  const [lastSelectedNode, setLastSelectedNode] = React.useState<DataNode>(); // 被选中的node
 
   // 递归查询节点
   const find = (
@@ -67,14 +64,12 @@ const TreeNodes: React.FC<{}> = () => {
 
   // 单击node事件
   const handleClick = (node: EventDataNode) => {
-    setSelectKeys([node.key.toString()]);
-    currentSelectedNode = node;
+    setLastSelectedNode(node)
   };
 
   // 右键单击node事件
   const handleRightClick = (info: handleRightClickProps) => {
-    setSelectKeys([info.node.key.toString()]);
-    currentSelectedNode = info.node;
+    setLastSelectedNode(info.node)
 
     const { pageX, pageY } = info.event;
     setPopMenuStatus(true);
@@ -155,7 +150,7 @@ const TreeNodes: React.FC<{}> = () => {
         defaultExpandParent
         autoExpandParent
         defaultExpandAll
-        selectedKeys={selectedKeys}
+        selectedKeys={lastSelectedNode ? [lastSelectedNode.key] : []}
         onDrop={handleDrop}
         onClick={(_e, node) => handleClick(node)}
         onRightClick={handleRightClick}
