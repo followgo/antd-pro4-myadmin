@@ -97,3 +97,37 @@ export function deepClone(srcObj: Object | Array<any>) {
 
   return loopCopy(srcObj);
 }
+
+// 比较 2 个相同长度的数组，返回已经被改变的成员
+// 根据 key 键匹配成员，然后比较指定的字段
+export function findDifferentItems<T>(
+  newArr: Array<T>,
+  oldArr: Array<T>,
+  key: string,
+  compareFields: string[],
+): Array<T> {
+  const diffItems: Array<T> = [];
+
+  newArr.forEach((newItem) => {
+    // 在 oldArr 中找到此条目
+    let oldIdx: number = -1;
+    const found = oldArr.some((item, idx) => {
+      oldIdx = idx;
+      return newItem[key] === item[key];
+    });
+
+    if (found && oldIdx !== -1) {
+      // 已经找到，比较指定的字段
+      const oldItem = oldArr.splice(oldIdx, 1);
+      const isEqual = compareFields.every((field) => newItem[field] === oldItem[field]);
+      if (!isEqual) {
+        diffItems.push(newItem);
+      }
+    } else {
+      // 在 oldArr 中没有找到
+      diffItems.push(newItem);
+    }
+  });
+
+  return diffItems;
+}
